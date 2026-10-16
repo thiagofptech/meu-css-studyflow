@@ -1,0 +1,1316 @@
+/* =========================================================
+   StudyFlow — src/style.css
+   Páginas: index.html, login.html, editar-perfil.html
+   Somente CSS: nenhum HTML/JS foi alterado.
+
+   Índice
+   1. Fontes
+   2. Tema claro (variáveis)
+   3. Tema escuro (variáveis)
+   4. Base e utilitários
+   5. Topo: logo, Notificações e Perfil
+   6. Menu e menus suspensos
+   7. Página principal (index)
+   8. Calendário
+   9. Compromissos de hoje
+   10. Sobreposições (modais) e formulário de compromisso
+   11. Assistente de IA
+   12. Campos, login e editar perfil
+   13. Responsivo (mobile)
+   ========================================================= */
+
+/* ---------- 1. Fontes ----------
+   Intel One Mono: fonte principal (títulos, subtítulos e corpo).
+   Inter: usada somente dentro do quadro "Compromissos de hoje". */
+@import url('https://fonts.googleapis.com/css2?family=Intel+One+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+/* ---------- 2. Tema claro (padrão) ----------
+   Gradientes: o "90°" do Figma corresponde a 0deg no CSS
+   (0% embaixo, 100% em cima), igual às imagens de referência. */
+body {
+    --fonte-principal: 'Intel One Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    --fonte-compromissos: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    --h-cab: 3.75rem;
+    --pilula-h: 2.75rem;
+
+    /* fundo geral */
+    --fundo: linear-gradient(0deg, #A4C3C4 0%, #EEEEEE 60%);
+
+    /* textos */
+    --texto: #4E5554;
+    --texto-compromissos: #4E5554;
+    --sobre-btn: #F3FFFD;
+    --logo: #4E5554;
+
+    /* ícones */
+    --icone: #576C6D;
+    --icone-ativo: #F3FFFD;
+
+    /* botões */
+    --btn-padrao: linear-gradient(0deg, rgba(255, 248, 238, 0.5) 0%, #EFF3E9 100%);
+    --btn-hover: #576C6D;
+    --btn-claro: #576C6D;
+
+    /* superfícies (extraídas do Figma onde o template não define) */
+    --painel: #FFF8EE;
+    --superficie: rgba(242, 241, 237, 0.76);
+    --campo-escuro: #576C6D;
+    --campo-placeholder: rgba(243, 255, 253, 0.45);
+    --linha: rgba(78, 85, 84, 0.25);
+    --hover-suave: rgba(87, 108, 109, 0.16);
+    --cortina: rgba(78, 85, 84, 0.35);
+
+    /* barra "Pergunte a seu assistente" */
+    --ia-borda: rgba(87, 108, 109, 0.55);
+    --ia-placeholder: rgba(97, 118, 117, 0.7);
+
+    /* chat */
+    --balao-usuario: #B1C8C9;
+    --balao-assistente: #91A3A4;
+    --texto-balao: #4E5554;
+    --chip-usuario: #576C6D;
+
+    --sombra: 0 4px 10px rgba(60, 80, 78, 0.28);
+    --sombra-forte: -3px 6px 10px rgba(40, 55, 53, 0.4);
+    --brilho-logo: 1px 2px 3px rgba(60, 80, 78, 0.45);
+
+    color-scheme: light;
+}
+
+/* ---------- 3. Tema escuro ----------
+   Ativado pelo checkbox #toggle-tema (já existente no HTML)
+   ou pela classe .tema-escuro no <body>. */
+body:has(#toggle-tema:checked),
+body.tema-escuro {
+    --fundo: linear-gradient(0deg, #10030D 0%, #000000 100%);
+
+    --texto: #E9DBE8;
+    --texto-compromissos: #F2F1ED;
+    --sobre-btn: #E9DBE8;
+    --logo: #E3C3DC;
+
+    --icone: #E9DBE8;
+    --icone-ativo: #E9DBE8;
+
+    --btn-padrao: linear-gradient(295deg, #161316 0%, #1D151C 100%);
+    --btn-hover: linear-gradient(295deg, #40313C 0%, #8B6B82 100%);
+    --btn-claro: #765F70;
+
+    --painel: #161316;
+    --superficie: rgba(242, 241, 237, 0.11);
+    --campo-escuro: #161316;
+    --campo-placeholder: rgba(233, 219, 232, 0.4);
+    --linha: rgba(233, 219, 232, 0.3);
+    --hover-suave: rgba(233, 219, 232, 0.1);
+    --cortina: rgba(0, 0, 0, 0.45);
+
+    --ia-borda: rgba(116, 97, 118, 0.55);
+    --ia-placeholder: rgba(233, 219, 232, 0.55);
+
+    --balao-usuario: #765F70;
+    --balao-assistente: #41383F;
+    --texto-balao: #E9DBE8;
+    --chip-usuario: linear-gradient(295deg, #40313C 0%, #8B6B82 100%);
+
+    --sombra: 0 4px 12px rgba(0, 0, 0, 0.6);
+    --sombra-forte: 0 8px 24px rgba(0, 0, 0, 0.6);
+    --brilho-logo: 0 0 10px rgba(227, 195, 220, 0.55);
+
+    color-scheme: dark;
+}
+
+/* ---------- 4. Base e utilitários ---------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    position: relative;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    font-family: var(--fonte-principal);
+    font-weight: 400;
+    color: var(--texto);
+    background: var(--fundo);
+    background-attachment: fixed;
+}
+
+h1, h2, h3, p, ul {
+    margin: 0;
+}
+
+ul {
+    padding: 0;
+    list-style: none;
+}
+
+a {
+    color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+:focus-visible {
+    outline: 2px solid var(--btn-claro);
+    outline-offset: 2px;
+}
+
+/* checkboxes que controlam as sobreposições */
+.toggle-overlay {
+    display: none;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ---------- 5. Topo: logo, Notificações e Perfil ---------- */
+#cabecalho,
+#cabecalho-login,
+#cabecalho-editar-perfil {
+    position: relative;
+    z-index: 40;
+    height: var(--h-cab);
+}
+
+#cabecalho {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-right: 1.5rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 1.25rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--logo);
+    text-decoration: none;
+    text-shadow: var(--brilho-logo);
+}
+
+#cabecalho .logo,
+#cabecalho-editar-perfil .logo {
+    cursor: pointer;
+}
+
+#cabecalho-editar-perfil .logo {
+    width: fit-content;
+}
+
+#toggle-menu:checked ~ #cabecalho .logo {
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+    text-shadow: none;
+}
+
+.cabecalho-acoes {
+    display: flex;
+    gap: 1.1rem;
+}
+
+.botao-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 7rem;
+    height: var(--pilula-h);
+    margin-top: calc((var(--h-cab) - var(--pilula-h)) / 2);
+    border-radius: 999px;
+    background: var(--btn-padrao);
+    box-shadow: var(--sombra);
+    color: var(--icone);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.botao-perfil {
+    width: 7.5rem;
+}
+
+.botao-cabecalho .rotulo {
+    color: var(--texto);
+}
+
+.botao-cabecalho .icone {
+    display: none;
+    width: 1.3rem;
+    height: 1.3rem;
+}
+
+.botao-cabecalho:hover {
+    background: var(--btn-hover);
+    color: var(--icone-ativo);
+}
+
+.botao-cabecalho:hover .rotulo {
+    color: var(--sobre-btn);
+}
+
+/* botão aberto vira "aba" ligada ao menu suspenso */
+#toggle-notificacoes:checked ~ #cabecalho label[for="toggle-notificacoes"],
+#toggle-perfil:checked ~ #cabecalho label[for="toggle-perfil"] {
+    height: var(--h-cab);
+    margin-top: 0;
+    border-radius: 1.75rem 1.75rem 0 0;
+    background: var(--btn-claro);
+    color: var(--icone-ativo);
+    box-shadow: none;
+}
+
+#toggle-notificacoes:checked ~ #cabecalho label[for="toggle-notificacoes"] .rotulo,
+#toggle-perfil:checked ~ #cabecalho label[for="toggle-perfil"] .rotulo {
+    color: var(--sobre-btn);
+}
+
+/* ---------- 6. Menu e menus suspensos ---------- */
+#overlay-menu,
+#overlay-notificacoes,
+#overlay-perfil {
+    display: none;
+    position: absolute;
+    top: var(--h-cab);
+    z-index: 45;
+}
+
+#toggle-menu:checked ~ #overlay-menu,
+#toggle-notificacoes:checked ~ #overlay-notificacoes,
+#toggle-perfil:checked ~ #overlay-perfil {
+    display: block;
+}
+
+/* menu de navegação (abre pelo logo) */
+#overlay-menu {
+    left: 0;
+    width: 10.8rem;
+    box-shadow: var(--sombra);
+}
+
+.overlay-nav a,
+.overlay-nav label {
+    display: block;
+    padding: 0.8rem 0.6rem;
+    background: var(--painel);
+    color: var(--texto);
+    font-size: 0.85rem;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.overlay-nav a:hover,
+.overlay-nav label:hover,
+.overlay-nav a:focus-visible {
+    background: var(--btn-hover);
+    color: var(--sobre-btn);
+}
+
+/* notificações */
+#overlay-notificacoes {
+    right: 10.1rem;
+    width: 19rem;
+    overflow: hidden;
+    border-radius: 0 0 0.9rem 0.9rem;
+    box-shadow: var(--sombra);
+}
+
+.marcar-lidas {
+    display: block;
+    width: 100%;
+    padding: 0.55rem;
+    border: 0;
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+    font-size: 0.65rem;
+    font-weight: 700;
+}
+
+.notifications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1rem 0.9rem 1.1rem;
+    background: var(--painel);
+}
+
+.notification-item {
+    font-size: 0.8rem;
+    line-height: 1.35;
+    text-align: center;
+}
+
+/* perfil */
+#overlay-perfil {
+    right: 1.5rem;
+    width: 13.5rem;
+    overflow: hidden;
+    border-radius: 0 0 0.9rem 0.9rem;
+    box-shadow: var(--sombra);
+}
+
+.perfil-saudacao {
+    padding: 0.3rem;
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+    font-size: 0.65rem;
+    text-align: center;
+}
+
+.perfil-opcao {
+    display: block;
+    padding: 0.65rem;
+    font-size: 0.9rem;
+    text-align: center;
+    text-decoration: none;
+}
+
+.perfil-editar {
+    background: var(--painel);
+    color: var(--texto);
+}
+
+.perfil-sair {
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+}
+
+.perfil-editar:hover {
+    background: var(--btn-hover);
+    color: var(--sobre-btn);
+}
+
+.perfil-sair:hover {
+    background: var(--btn-hover);
+}
+
+/* ---------- 7. Página principal (index) ---------- */
+#conteudo-principal {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 15.5rem;
+    column-gap: 1.5rem;
+    align-items: start;
+    width: min(76vw, 1100px);
+    margin: 0 auto;
+    padding-bottom: 4rem;
+}
+
+#secao-principal {
+    grid-column: 1 / -1;
+    margin-bottom: 3rem;
+    padding-top: 2rem;
+    text-align: center;
+}
+
+#secao-principal h1 {
+    max-width: 46rem;
+    margin: 0 auto 0.6rem;
+    font-size: clamp(1.6rem, 4.2vw, 3rem);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.welcome-text {
+    max-width: 44rem;
+    margin: 0 auto;
+    font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+    line-height: 1.4;
+}
+
+.assistant-wrapper {
+    position: relative;
+    max-width: 44rem;
+    margin: 2.5rem auto 0;
+    text-align: center;
+}
+
+.assistant-wrapper span {
+    display: inline-block;
+    padding-left: 0.5rem;
+    border-left: 2px solid var(--texto);
+    font-size: 0.9rem;
+}
+
+.assistant-wrapper p {
+    max-width: 25rem;
+    margin: 0.1rem auto 1rem;
+    font-size: 0.9rem;
+    line-height: 1.35;
+}
+
+.assistant-wrapper input {
+    width: 100%;
+    height: 2.75rem;
+    padding: 0 3rem;
+    border: 2px solid var(--ia-borda);
+    border-radius: 999px;
+    background: transparent;
+    font-size: 0.72rem;
+    text-align: center;
+}
+
+.assistant-wrapper input::placeholder {
+    color: var(--ia-placeholder);
+}
+
+.btn-assistant-send {
+    position: absolute;
+    right: 24%;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    height: 2.75rem;
+    font-size: 0.85rem;
+    color: var(--ia-placeholder);
+    cursor: pointer;
+}
+
+.btn-assistant-send:hover {
+    color: var(--texto);
+}
+
+/* ---------- 8. Calendário ---------- */
+.calendario-topo {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 0.9rem;
+}
+
+.calendario-topo h2 {
+    padding-left: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.botao-adicionar {
+    padding: 0.55rem 1rem;
+    border-radius: 0.5rem;
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+    font-size: 0.75rem;
+    text-align: center;
+    box-shadow: var(--sombra);
+    cursor: pointer;
+}
+
+.botao-adicionar:hover {
+    background: var(--btn-hover);
+}
+
+.calendario-caixa {
+    padding: 0.75rem clamp(0.75rem, 2vw, 1.75rem) 1.5rem;
+    border-radius: 2rem;
+    background: var(--superficie);
+    box-shadow: var(--sombra);
+}
+
+.calendario-mes {
+    display: grid;
+    grid-template-columns: 2rem 1fr 2rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.calendario-mes h3 {
+    font-size: clamp(1.3rem, 3vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.seta {
+    justify-self: center;
+    padding: 0.25rem;
+    border: 0;
+    background: none;
+    color: var(--ia-placeholder);
+    font-size: 1.1rem;
+}
+
+.seta:hover {
+    color: var(--texto);
+}
+
+.calendario-grade {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.calendario-grade th {
+    padding: 0.5rem 0 1rem;
+    font-size: clamp(0.65rem, 1.9vw, 1.5rem);
+    font-weight: 400;
+    text-align: center;
+}
+
+.calendario-grade td {
+    padding: 0.15rem 0;
+    text-align: center;
+}
+
+.dia {
+    display: block;
+    width: clamp(2rem, 4.4vw, 3.5rem);
+    aspect-ratio: 1;
+    margin: 0.25rem auto;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    font-size: clamp(0.85rem, 2.2vw, 1.5rem);
+    font-weight: 700;
+}
+
+.dia:hover {
+    background: var(--hover-suave);
+}
+
+.dia-hoje,
+.dia-hoje:hover {
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+}
+
+/* ---------- 9. Compromissos de hoje (única área com Inter) ---------- */
+#painel-compromissos-hoje {
+    position: relative;
+    margin-top: 6.5rem;
+    padding: 1.75rem 1rem 1.5rem;
+    border-radius: 1.75rem;
+    background: var(--superficie);
+    box-shadow: var(--sombra);
+    color: var(--texto-compromissos);
+    font-family: var(--fonte-compromissos);
+    scroll-margin-top: 6rem;
+}
+
+#painel-compromissos-hoje h2 {
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    left: 0;
+    margin-bottom: 0.5rem;
+    color: var(--texto);
+    font-family: var(--fonte-principal);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.appointment-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    margin-bottom: 1.4rem;
+}
+
+/* checkbox de conclusão: oculto visualmente, mas acessível por teclado */
+.checkbox-concluir {
+    position: absolute;
+    opacity: 0;
+}
+
+.appointment-text {
+    max-width: 12rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.35;
+    text-align: center;
+    text-wrap: balance;
+}
+
+.btn-concluir {
+    font-size: 0.55rem;
+    cursor: pointer;
+}
+
+.btn-concluir:hover {
+    text-decoration: underline;
+}
+
+.checkbox-concluir:focus-visible ~ .btn-concluir {
+    outline: 2px solid var(--btn-claro);
+    outline-offset: 2px;
+}
+
+.checkbox-concluir:checked ~ .appointment-text,
+.checkbox-concluir:checked ~ .btn-concluir {
+    opacity: 0.55;
+}
+
+.checkbox-concluir:checked ~ .appointment-text {
+    text-decoration: line-through;
+}
+
+.progress-tracker {
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* ---------- 10. Sobreposições (modais) e formulário de compromisso ---------- */
+#overlay-adicionar-compromisso,
+#overlay-assistente {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    place-items: center;
+    padding: 1rem;
+}
+
+#toggle-adicionar:checked ~ #overlay-adicionar-compromisso,
+#toggle-assistente:checked ~ #overlay-assistente {
+    display: grid;
+}
+
+/* fundo desfocado atrás do modal */
+.overlay-fundo {
+    position: absolute;
+    inset: 0;
+    background: var(--cortina);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    cursor: pointer;
+}
+
+.overlay-caixa {
+    position: relative;
+    z-index: 1;
+    width: min(40rem, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 1.4rem 1.6rem 1.5rem;
+    border-radius: 2rem;
+    background: var(--painel);
+    box-shadow: var(--sombra-forte);
+}
+
+.overlay-topo {
+    position: relative;
+    padding-top: 1.4rem;
+}
+
+.overlay-topo h2 {
+    font-size: clamp(1.4rem, 3.2vw, 2.3rem);
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+}
+
+/* ícones "edit icon.svg" e "closed icon.svg" (arquivos do projeto),
+   pintados com a cor do tema. Os símbolos de texto do HTML ficam ocultos. */
+.icone-editar,
+.botao-fechar {
+    position: absolute;
+    top: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: var(--icone);
+    font-size: 0;
+    line-height: 0;
+    -webkit-mask: center / contain no-repeat;
+    mask: center / contain no-repeat;
+}
+
+.icone-editar {
+    left: 0;
+    -webkit-mask-image: url("./assets/icons%20svg/edit%20icon.svg");
+    mask-image: url("./assets/icons%20svg/edit%20icon.svg");
+}
+
+.botao-fechar {
+    right: 0;
+    cursor: pointer;
+    -webkit-mask-image: url("./assets/icons%20svg/closed%20icon.svg");
+    mask-image: url("./assets/icons%20svg/closed%20icon.svg");
+}
+
+.botao-fechar:hover {
+    background-color: var(--btn-claro);
+}
+
+/* formulário do compromisso */
+#form-adicionar-compromisso {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    grid-template-rows: repeat(4, auto);
+    column-gap: 2rem;
+    row-gap: 0.6rem;
+    margin-top: 1.25rem;
+}
+
+#form-adicionar-compromisso .campo {
+    grid-column: 1;
+}
+
+#form-adicionar-compromisso .campo label {
+    color: var(--texto);
+    font-size: 1rem;
+}
+
+#form-adicionar-compromisso .campo input,
+#form-adicionar-compromisso .campo select {
+    min-height: 2rem;
+    border-bottom: 2px dotted var(--texto);
+}
+
+#form-adicionar-compromisso .campo-descricao {
+    grid-column: 2;
+    grid-row: 1 / span 4;
+    height: 100%;
+}
+
+#form-adicionar-compromisso .campo-descricao textarea {
+    flex: 1;
+    min-height: 11rem;
+    padding: 1rem;
+    border: 0;
+    border-radius: 1rem;
+    background: var(--campo-escuro);
+    color: var(--sobre-btn);
+    font-size: 0.95rem;
+    resize: none;
+}
+
+#form-adicionar-compromisso textarea::placeholder {
+    color: var(--campo-placeholder);
+}
+
+.botao-salvar {
+    padding: 0.45rem 1.1rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+    font-size: 0.8rem;
+    font-weight: 700;
+    box-shadow: var(--sombra);
+}
+
+.botao-salvar:hover {
+    background: var(--btn-hover);
+}
+
+#form-adicionar-compromisso .botao-salvar {
+    grid-column: 2;
+    grid-row: 5;
+    justify-self: end;
+    margin-top: 0.4rem;
+}
+
+/* ---------- 11. Assistente de IA ---------- */
+.chat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    max-height: 50vh;
+    margin: 1.25rem 0 1rem;
+    overflow-y: auto;
+}
+
+.mensagem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.mensagem-usuario {
+    align-items: flex-end;
+}
+
+.mensagem-assistente {
+    align-items: flex-start;
+}
+
+/* os <img> do HTML ficam ocultos e os mesmos arquivos SVG
+   ("user icon.svg" e "robot icon.svg") são desenhados por máscara,
+   para poder usar a cor do tema */
+.remetente img {
+    display: none;
+}
+
+.mensagem-usuario .remetente {
+    position: relative;
+    display: inline-block;
+    margin-right: 2rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 0.4rem;
+    background: var(--chip-usuario);
+    color: var(--sobre-btn);
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1.3;
+    text-transform: uppercase;
+}
+
+.mensagem-usuario .remetente::after,
+.mensagem-assistente .remetente::before {
+    content: '';
+    position: absolute;
+    background-color: var(--icone);
+    -webkit-mask: center / contain no-repeat;
+    mask: center / contain no-repeat;
+}
+
+.mensagem-usuario .remetente::after {
+    top: 50%;
+    left: 100%;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-left: 0.35rem;
+    transform: translateY(-50%);
+    -webkit-mask-image: url("./assets/icons%20svg/user%20icon.svg");
+    mask-image: url("./assets/icons%20svg/user%20icon.svg");
+}
+
+.mensagem-assistente .remetente {
+    position: relative;
+    display: block;
+    width: 1.8rem;
+    height: 1.8rem;
+}
+
+.mensagem-assistente .remetente::before {
+    inset: 0;
+    -webkit-mask-image: url("./assets/icons%20svg/robot%20icon.svg");
+    mask-image: url("./assets/icons%20svg/robot%20icon.svg");
+}
+
+.mensagem p {
+    max-width: 92%;
+    padding: 0.45rem 0.7rem;
+    border-radius: 0.5rem;
+    color: var(--texto-balao);
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+.mensagem-usuario p {
+    background: var(--balao-usuario);
+    text-align: right;
+}
+
+.mensagem-assistente p {
+    background: var(--balao-assistente);
+    text-align: left;
+}
+
+.barra-pergunta {
+    display: flex;
+    align-items: center;
+    margin: 0 0.5rem;
+    padding: 0.2rem 0.9rem;
+    border: 1.5px solid var(--ia-borda);
+    border-radius: 999px;
+}
+
+.barra-pergunta:focus-within {
+    border-color: var(--btn-claro);
+}
+
+.barra-pergunta input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.35rem;
+    border: 0;
+    outline: 0;
+    background: none;
+    font-size: 0.7rem;
+    text-align: center;
+}
+
+.barra-pergunta input::placeholder {
+    color: var(--ia-placeholder);
+}
+
+.barra-pergunta button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ia-placeholder);
+    font-size: 0.8rem;
+}
+
+.barra-pergunta button:hover {
+    color: var(--texto);
+}
+
+/* ---------- 12. Campos, login e editar perfil ---------- */
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    text-align: left;
+}
+
+.campo label {
+    color: var(--ia-placeholder);
+    font-size: 0.8rem;
+}
+
+.campo input,
+.campo select {
+    width: 100%;
+    min-height: 1.8rem;
+    padding: 0.3rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--linha);
+    border-radius: 0;
+    background: transparent;
+    outline: none;
+}
+
+.campo input:focus,
+.campo select:focus {
+    border-bottom-color: var(--btn-claro);
+}
+
+.campo select option {
+    background: var(--painel);
+    color: var(--texto);
+}
+
+/* centraliza o cartão na tela (sem barra de topo) */
+.pagina-login #conteudo-login,
+.pagina-editar-perfil #conteudo-editar-perfil {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin-top: calc(-1 * var(--h-cab));
+    padding: var(--h-cab) 1rem 1rem;
+}
+
+.caixa-login,
+.caixa-editar-perfil {
+    width: min(40rem, 100%);
+    padding: 2rem clamp(1.25rem, 8vw, 4.5rem) 2.5rem;
+    border-radius: 2.5rem;
+    background: var(--painel);
+    box-shadow: var(--sombra-forte);
+}
+
+.caixa-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* o h1 do login está com .sr-only no HTML; o design o exibe */
+.pagina-login h1.sr-only {
+    position: static;
+    order: -1;
+    width: auto;
+    height: auto;
+    margin: 0 0 1.25rem;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
+    white-space: normal;
+    font-size: clamp(1.5rem, 5vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+}
+
+/* ícone do login: mesmo arquivo "user icon.svg", cor do tema */
+.icone-login {
+    display: none;
+}
+
+.caixa-login::before {
+    content: '';
+    width: clamp(5rem, 16vw, 8rem);
+    aspect-ratio: 1;
+    margin: 0.5rem 0 1.75rem;
+    background-color: var(--icone);
+    -webkit-mask: url("./assets/icons%20svg/user%20icon.svg") center / contain no-repeat;
+    mask: url("./assets/icons%20svg/user%20icon.svg") center / contain no-repeat;
+}
+
+#form-login {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    width: 100%;
+}
+
+.botao-entrar {
+    align-self: center;
+    margin-top: 0.5rem;
+    padding: 0.7rem 2.5rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    box-shadow: var(--sombra);
+}
+
+.botao-entrar:hover {
+    background: var(--btn-hover);
+}
+
+/* editar perfil */
+.caixa-editar-perfil h1 {
+    margin-bottom: 1.5rem;
+    font-size: clamp(1.5rem, 5vw, 2.4rem);
+    font-weight: 700;
+    text-align: center;
+}
+
+#form-editar-perfil {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.campo-foto {
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.icone-foto {
+    width: 5.5rem;
+    height: 5.5rem;
+    color: var(--icone);
+}
+
+.campo-foto input[type='file'] {
+    width: auto;
+    min-height: 0;
+    border: 0;
+    color: var(--ia-placeholder);
+    font-size: 0.8rem;
+}
+
+.campo-foto input[type='file']::file-selector-button {
+    margin-right: 0.6rem;
+    padding: 0.4rem 0.8rem;
+    border: 0;
+    border-radius: 0.4rem;
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+    font: inherit;
+    cursor: pointer;
+}
+
+.acoes-formulario {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.25rem;
+}
+
+.acoes-formulario .botao-salvar,
+.botao-cancelar {
+    padding: 0.7rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.botao-cancelar {
+    border: 2px solid var(--ia-borda);
+    color: var(--texto);
+    text-decoration: none;
+}
+
+.botao-cancelar:hover {
+    background: var(--hover-suave);
+}
+
+/* ---------- 13. Responsivo (mobile) ---------- */
+@media (max-width: 860px) {
+    body {
+        --h-cab: 4.5rem;
+        --pilula-h: 2.5rem;
+    }
+
+    #cabecalho {
+        padding-right: 1rem;
+    }
+
+    .cabecalho-acoes {
+        gap: 0.75rem;
+    }
+
+    .botao-cabecalho,
+    .botao-perfil {
+        width: 3.4rem;
+    }
+
+    .botao-cabecalho .rotulo {
+        display: none;
+    }
+
+    .botao-cabecalho .icone {
+        display: block;
+    }
+
+    #toggle-notificacoes:checked ~ #cabecalho label[for="toggle-notificacoes"],
+    #toggle-perfil:checked ~ #cabecalho label[for="toggle-perfil"] {
+        border-radius: 1.7rem 1.7rem 0 0;
+    }
+
+    /* menus ocupam a largura toda */
+    #overlay-menu,
+    #overlay-notificacoes,
+    #overlay-perfil {
+        right: 0;
+        left: 0;
+        width: auto;
+        border-radius: 0;
+    }
+
+    .overlay-nav a,
+    .overlay-nav label {
+        padding: 1rem 0.6rem;
+        font-size: 1rem;
+    }
+
+    .marcar-lidas {
+        padding: 0.7rem;
+    }
+
+    .notification-item {
+        font-size: 0.85rem;
+    }
+
+    .perfil-saudacao {
+        font-size: 0.7rem;
+    }
+
+    .perfil-opcao {
+        padding: 0.9rem;
+        font-size: 1rem;
+    }
+
+    /* conteúdo em uma coluna */
+    #conteudo-principal {
+        display: block;
+    }
+
+    #secao-principal {
+        margin-bottom: 2.5rem;
+        padding-top: 1rem;
+    }
+
+    .assistant-wrapper {
+        margin-top: 1.75rem;
+    }
+
+    .assistant-wrapper span,
+    .assistant-wrapper p {
+        font-size: 0.75rem;
+    }
+
+    .assistant-wrapper input {
+        height: 2.25rem;
+        padding: 0 2.5rem 0 1rem;
+        font-size: 0.6rem;
+    }
+
+    .btn-assistant-send {
+        right: 1.1rem;
+        height: 2.25rem;
+        font-size: 0.7rem;
+    }
+
+    .calendario-topo h2 {
+        font-size: 1rem;
+    }
+
+    .botao-adicionar {
+        max-width: 6.8rem;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.6rem;
+    }
+
+    #painel-compromissos-hoje {
+        margin-top: 4rem;
+    }
+
+    /* modais */
+    .overlay-caixa {
+        padding: 1.1rem 1rem 1.25rem;
+        border-radius: 1.75rem;
+    }
+
+    #form-adicionar-compromisso {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: none;
+        column-gap: 1rem;
+    }
+
+    #form-adicionar-compromisso .campo {
+        grid-column: auto;
+    }
+
+    #form-adicionar-compromisso .campo:nth-child(3),
+    #form-adicionar-compromisso .campo:nth-child(4) {
+        grid-column: 1 / -1;
+    }
+
+    #form-adicionar-compromisso .campo-descricao {
+        grid-column: 1 / -1;
+        grid-row: auto;
+        height: auto;
+    }
+
+    #form-adicionar-compromisso .campo label {
+        font-size: 0.8rem;
+    }
+
+    #form-adicionar-compromisso .botao-salvar {
+        grid-column: 1 / -1;
+        grid-row: auto;
+    }
+
+    .caixa-login,
+    .caixa-editar-perfil {
+        border-radius: 2rem;
+    }
+}
