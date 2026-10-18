@@ -1,72 +1,141 @@
-@import url("https://fonts.googleapis.com/css2?family=Intel+One+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap");
+/* =========================================================
+   StudyFlow — src/style.css
+   Páginas: index.html, login.html, editar-perfil.html
+   Somente CSS: nenhum HTML/JS foi alterado.
 
-/* ==========================================================================
-   StudyFlow - style.css
-   Etapa 3 (somente CSS). Overlays por checkbox + :has() para o tema escuro.
-   Breakpoints: >=1280 desktop | 701-1279 tablet | <=700 celular | <=400 celular pequeno
-   ========================================================================== */
+   Índice
+   1. Fontes
+   2. Tema claro (variáveis)
+   3. Tema escuro (variáveis)
+   4. Base e utilitários
+   5. Topo: logo, Notificações e Perfil
+   6. Menu e menus suspensos
+   7. Página principal (index)
+   8. Calendário
+   9. Compromissos de hoje
+   10. Sobreposições (modais) e formulário de compromisso
+   11. Assistente de IA
+   12. Campos, login e editar perfil
+   13. Responsivo (mobile)
+   ========================================================= */
 
-/* ---------- Tokens ---------- */
-:root {
-    --mono: "Intel One Mono", "IBM Plex Mono", ui-monospace, "Courier New", monospace;
-    --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-    --fs: 0.96rem;
+/* ---------- 1. Fontes ----------
+   Intel One Mono: fonte principal (títulos, subtítulos e corpo).
+   Carregada dos arquivos estáticos do pacote @fontsource (jsDelivr): a versão
+   do Google Fonts desmontava os acentos (á, ã, õ ficavam soltos da letra).
+   Inter: usada somente dentro do quadro "Compromissos de hoje". */
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/intel-one-mono@5.3.0/400.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/intel-one-mono@5.3.0/600.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/intel-one-mono@5.3.0/700.css');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-    --texto: #4b5755;
-    --acento: #566d6e;
-    --sobre-acento: #ffffff;
-    --fundo-topo: #ededed;
-    --fundo-base: #a3c2c6;
-    --cartao: #e9ece7;
-    --item: #fdf6ec;
-    --modal-topo: #fdf6ec;
-    --modal-base: #f9f4ea;
-    --pilula: #f3f2ec;
-    --campo: #c6d1d0;
-    --suave: #9fabaa;
-    --seta: #9aa9a9;
-    --linha-input: #5a6563;
-    --hover-dia: rgba(86, 109, 110, 0.14);
-    --bolha-user: #a9c5c6;
-    --texto-user: #3f4b4a;
-    --bolha-ia: #8ba2a2;
-    --texto-ia: #ffffff;
-    --tag-ia: #7f9797;
-    --foco: #2f4a4c;
-    --sombra: 3px 4px 8px rgba(0, 0, 0, 0.2);
-    --sombra-cartao: 0 5px 12px rgba(0, 0, 0, 0.14);
-    --brilho: 2px 3px 4px rgba(0, 0, 0, 0.28);
+/* ---------- 2. Tema claro (padrão) ----------
+   Gradientes: o "90°" do Figma corresponde a 0deg no CSS
+   (0% embaixo, 100% em cima), igual às imagens de referência. */
+body {
+    --fonte-principal: 'Intel One Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    --fonte-compromissos: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    --h-cab: 3.75rem;
+    --pilula-h: 2.75rem;
+
+    /* fundo geral */
+    --fundo: linear-gradient(0deg, #A4C3C4 0%, #EEEEEE 60%);
+
+    /* textos */
+    --texto: #4E5554;
+    --texto-compromissos: #4E5554;
+    --sobre-btn: #F3FFFD;
+    --logo: #4E5554;
+
+    /* ícones */
+    --icone: #576C6D;
+    --icone-ativo: #F3FFFD;
+
+    /* botões */
+    --btn-padrao: linear-gradient(0deg, rgba(255, 248, 238, 0.5) 0%, #EFF3E9 100%);
+    --btn-claro: #576C6D;
+
+    /* hover: um pouco mais escuro */
+    --hover-img-pilula: var(--btn-padrao);
+    --hover-img-item: none;
+    --filtro-hover-padrao: brightness(0.92);
+    --filtro-hover-escuro: brightness(0.85);
+
+    /* superfícies (extraídas do Figma onde o template não define) */
+    --painel: #FFF8EE;
+    --superficie: rgba(242, 241, 237, 0.76);
+    --campo-escuro: #576C6D;
+    --campo-placeholder: rgba(243, 255, 253, 0.45);
+    --linha: rgba(78, 85, 84, 0.25);
+    --hover-suave: rgba(87, 108, 109, 0.16);
+    --cortina: rgba(78, 85, 84, 0.35);
+
+    /* barra "Pergunte a seu assistente" */
+    --ia-borda: rgba(87, 108, 109, 0.55);
+    --ia-placeholder: rgba(97, 118, 117, 0.7);
+
+    /* chat */
+    --balao-usuario: #B1C8C9;
+    --balao-assistente: #91A3A4;
+    --texto-balao: #4E5554;
+    --chip-usuario: #576C6D;
+
+    --sombra: 0 4px 10px rgba(60, 80, 78, 0.28);
+    --sombra-forte: -3px 6px 10px rgba(40, 55, 53, 0.4);
+    --brilho-logo: 1px 2px 3px rgba(60, 80, 78, 0.45);
+
+    color-scheme: light;
 }
 
-/* Tema escuro: ativado pelo checkbox #toggle-tema (sem JS) */
-html:has(#toggle-tema:checked) {
+/* ---------- 3. Tema escuro ----------
+   Ativado pelo checkbox #toggle-tema (já existente no HTML)
+   ou pela classe .tema-escuro no <body>. */
+body:has(#toggle-tema:checked),
+body.tema-escuro {
+    --fundo: linear-gradient(0deg, #10030D 0%, #000000 100%);
+
+    --texto: #E9DBE8;
+    --texto-compromissos: #F2F1ED;
+    --sobre-btn: #E9DBE8;
+    --logo: #E3C3DC;
+
+    --icone: #E9DBE8;
+    --icone-ativo: #E9DBE8;
+
+    --btn-padrao: linear-gradient(295deg, #161316 0%, #1D151C 100%);
+    --btn-hover: linear-gradient(295deg, #40313C 0%, #8B6B82 100%);
+    --btn-claro: #765F70;
+
+    --hover-img-pilula: var(--btn-hover);
+    --hover-img-item: var(--btn-hover);
+    --filtro-hover-padrao: none;
+    --filtro-hover-escuro: brightness(0.85);
+
+    --painel: #161316;
+    --superficie: rgba(242, 241, 237, 0.11);
+    --campo-escuro: #161316;
+    --campo-placeholder: rgba(233, 219, 232, 0.4);
+    --linha: rgba(233, 219, 232, 0.3);
+    --hover-suave: rgba(233, 219, 232, 0.1);
+    --cortina: rgba(0, 0, 0, 0.45);
+
+    --ia-borda: rgba(116, 97, 118, 0.55);
+    --ia-placeholder: rgba(233, 219, 232, 0.55);
+
+    --balao-usuario: #765F70;
+    --balao-assistente: #41383F;
+    --texto-balao: #E9DBE8;
+    --chip-usuario: linear-gradient(295deg, #40313C 0%, #8B6B82 100%);
+
+    --sombra: 0 4px 12px rgba(0, 0, 0, 0.6);
+    --sombra-forte: 0 8px 24px rgba(0, 0, 0, 0.6);
+    --brilho-logo: 0 0 10px rgba(227, 195, 220, 0.55);
+
     color-scheme: dark;
-    --texto: #ecd9ea;
-    --acento: #7a6074;
-    --fundo-topo: #000000;
-    --fundo-base: #1a0618;
-    --cartao: #231c20;
-    --item: #131114;
-    --modal-topo: #1d171d;
-    --modal-base: #161216;
-    --pilula: #17121a;
-    --campo: #3a2f38;
-    --suave: #8f8290;
-    --seta: #cdbbca;
-    --linha-input: #d9c6d6;
-    --hover-dia: rgba(236, 217, 234, 0.14);
-    --bolha-user: #5d4a58;
-    --texto-user: #f3e6f1;
-    --bolha-ia: #3a2f38;
-    --texto-ia: #f3e6f1;
-    --tag-ia: #4b3b47;
-    --foco: #f0d4ee;
-    --sombra: none;
-    --sombra-cartao: none;
-    --brilho: 0 0 8px rgba(236, 217, 234, 0.45);
 }
 
-/* ---------- Base ---------- */
+/* ---------- 4. Base e utilitários ---------- */
 *,
 *::before,
 *::after {
@@ -74,24 +143,18 @@ html:has(#toggle-tema:checked) {
 }
 
 html {
-    font-synthesis: none;
-    -webkit-font-smoothing: antialiased;
     scroll-behavior: smooth;
-    -webkit-text-size-adjust: 100%;
 }
 
 body {
     position: relative;
-    margin: 0;
     min-height: 100vh;
-    min-height: 100dvh;
+    margin: 0;
     overflow-x: hidden;
-    font-family: var(--mono);
-    font-size: var(--fs);
-    line-height: 1.4;
+    font-family: var(--fonte-principal);
+    font-weight: 400;
     color: var(--texto);
-    background-color: var(--fundo-base);
-    background-image: linear-gradient(180deg, var(--fundo-topo) 0, var(--fundo-topo) 40%, var(--fundo-base) 100%);
+    background: var(--fundo);
     background-attachment: fixed;
 }
 
@@ -104,14 +167,30 @@ ul {
     list-style: none;
 }
 
-button, input, select, textarea {
+a {
+    color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
     font: inherit;
     color: inherit;
 }
 
-img, svg {
-    display: block;
-    max-width: 100%;
+button {
+    cursor: pointer;
+}
+
+:focus-visible {
+    outline: 2px solid var(--btn-claro);
+    outline-offset: 2px;
+}
+
+/* checkboxes que controlam as sobreposições */
+.toggle-overlay {
+    display: none;
 }
 
 .sr-only {
@@ -127,284 +206,386 @@ img, svg {
     border: 0;
 }
 
-:focus-visible {
-    outline: 2px solid var(--foco);
-    outline-offset: 2px;
+/* transição suave do hover (barras e botões) */
+.botao-cabecalho,
+.overlay-nav a,
+.overlay-nav label,
+.marcar-lidas,
+.perfil-opcao,
+.botao-adicionar,
+.botao-salvar,
+.botao-entrar {
+    transition: filter 0.15s ease;
 }
 
-/* Checkboxes de controle: invisiveis, mas focaveis por teclado */
-.toggle-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-    pointer-events: none;
-}
-
-/* ---------- Cabecalho (compartilhado) ---------- */
+/* ---------- 5. Topo: logo, Notificações e Perfil ---------- */
 #cabecalho,
 #cabecalho-login,
 #cabecalho-editar-perfil {
     position: relative;
     z-index: 40;
+    height: var(--h-cab);
+}
+
+#cabecalho {
     display: flex;
-    justify-content: space-between;
     align-items: flex-start;
-    height: 55px;
+    justify-content: space-between;
+    padding-right: 1.5rem;
 }
 
 .logo {
     display: flex;
     align-items: center;
-    height: 55px;
-    padding: 0 21px;
-    font-family: var(--mono);
+    height: 100%;
+    padding: 0 1.25rem;
     font-size: 1.5rem;
-    font-weight: 600;
-    line-height: 1;
-    color: var(--texto);
+    font-weight: 700;
+    color: var(--logo);
     text-decoration: none;
-    text-shadow: var(--brilho);
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 0.15s, color 0.15s;
+    text-shadow: var(--brilho-logo);
 }
 
-span.logo {
-    cursor: default;
+#cabecalho .logo,
+#cabecalho-editar-perfil .logo {
+    cursor: pointer;
+}
+
+#cabecalho-editar-perfil .logo {
+    width: fit-content;
 }
 
 #toggle-menu:checked ~ #cabecalho .logo {
-    background: var(--acento);
-    color: var(--sobre-acento);
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
     text-shadow: none;
 }
 
 .cabecalho-acoes {
     display: flex;
-    gap: 18px;
-    margin: 10px 17px 0 0;
+    gap: 1.1rem;
 }
 
 .botao-cabecalho {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 114px;
-    height: 50px;
-    border-radius: 25px;
-    background: var(--pilula);
-    color: var(--texto);
+    width: 7rem;
+    height: var(--pilula-h);
+    margin-top: calc((var(--h-cab) - var(--pilula-h)) / 2);
+    border-radius: 999px;
+    background: var(--btn-padrao);
     box-shadow: var(--sombra);
-    font-size: 0.69rem;
-    font-weight: 600;
-    line-height: 1;
+    color: var(--icone);
+    font-size: 0.72rem;
+    font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
-    user-select: none;
-    transition: background-color 0.15s, color 0.15s;
+}
+
+.botao-perfil {
+    width: 7.5rem;
+}
+
+.botao-cabecalho .rotulo {
+    color: var(--texto);
 }
 
 .botao-cabecalho .icone {
     display: none;
-    width: 24px;
-    height: 24px;
+    width: 1.3rem;
+    height: 1.3rem;
 }
 
+.botao-cabecalho:hover {
+    background-image: var(--hover-img-pilula);
+    filter: var(--filtro-hover-padrao);
+}
+
+/* botão aberto vira "aba" ligada ao menu suspenso */
 #toggle-notificacoes:checked ~ #cabecalho label[for="toggle-notificacoes"],
 #toggle-perfil:checked ~ #cabecalho label[for="toggle-perfil"] {
-    height: 55px;
-    border-radius: 25px 25px 0 0;
-    background: var(--acento);
-    color: var(--sobre-acento);
+    height: var(--h-cab);
+    margin-top: 0;
+    border-radius: 1.75rem 1.75rem 0 0;
+    background: var(--btn-claro);
+    color: var(--icone-ativo);
     box-shadow: none;
 }
 
-/* ---------- Pagina inicial: estrutura ---------- */
+#toggle-notificacoes:checked ~ #cabecalho label[for="toggle-notificacoes"] .rotulo,
+#toggle-perfil:checked ~ #cabecalho label[for="toggle-perfil"] .rotulo {
+    color: var(--sobre-btn);
+}
+
+/* ---------- 6. Menu e menus suspensos ---------- */
+#overlay-menu,
+#overlay-notificacoes,
+#overlay-perfil {
+    display: none;
+    position: absolute;
+    top: var(--h-cab);
+    z-index: 45;
+}
+
+#toggle-menu:checked ~ #overlay-menu,
+#toggle-notificacoes:checked ~ #overlay-notificacoes,
+#toggle-perfil:checked ~ #overlay-perfil {
+    display: block;
+}
+
+/* menu de navegação (abre pelo logo) */
+#overlay-menu {
+    left: 0;
+    width: 10.8rem;
+    box-shadow: var(--sombra);
+}
+
+.overlay-nav a,
+.overlay-nav label {
+    display: block;
+    padding: 0.8rem 0.6rem;
+    background: var(--painel);
+    color: var(--texto);
+    font-size: 0.85rem;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.overlay-nav a:hover,
+.overlay-nav label:hover,
+.overlay-nav a:focus-visible {
+    background-image: var(--hover-img-item);
+    filter: var(--filtro-hover-padrao);
+}
+
+/* notificações */
+#overlay-notificacoes {
+    right: 10.1rem;
+    width: 19rem;
+    overflow: hidden;
+    border-radius: 0 0 0.9rem 0.9rem;
+    box-shadow: var(--sombra);
+}
+
+.marcar-lidas {
+    display: block;
+    width: 100%;
+    padding: 0.55rem;
+    border: 0;
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+    font-size: 0.65rem;
+    font-weight: 700;
+}
+
+.marcar-lidas:hover {
+    filter: var(--filtro-hover-escuro);
+}
+
+.notifications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1rem 0.9rem 1.1rem;
+    background: var(--painel);
+}
+
+.notification-item {
+    font-size: 0.8rem;
+    line-height: 1.35;
+    text-align: center;
+}
+
+/* perfil */
+#overlay-perfil {
+    right: 1.5rem;
+    width: 13.5rem;
+    overflow: hidden;
+    border-radius: 0 0 0.9rem 0.9rem;
+    box-shadow: var(--sombra);
+}
+
+.perfil-saudacao {
+    padding: 0.4rem 0.3rem;
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+    font-size: 0.65rem;
+    line-height: 1.3;
+    text-align: center;
+}
+
+.perfil-opcao {
+    display: block;
+    padding: 0.65rem;
+    font-size: 0.9rem;
+    text-align: center;
+    text-decoration: none;
+}
+
+.perfil-editar {
+    background: var(--painel);
+    color: var(--texto);
+}
+
+.perfil-sair {
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+}
+
+.perfil-editar:hover {
+    background-image: var(--hover-img-item);
+    filter: var(--filtro-hover-padrao);
+}
+
+.perfil-sair:hover {
+    filter: var(--filtro-hover-escuro);
+}
+
+/* ---------- 7. Página principal (index) ---------- */
 #conteudo-principal {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    width: min(696px, calc(100% - 32px));
+    grid-template-columns: minmax(0, 1fr) 15.5rem;
+    column-gap: 1.5rem;
+    align-items: start;
+    width: min(76vw, 1100px);
     margin: 0 auto;
-    padding-bottom: 64px;
+    padding-bottom: 4rem;
 }
 
 #secao-principal {
-    padding-top: 46px;
+    grid-column: 1 / -1;
+    margin-bottom: 3rem;
+    padding-top: 2rem;
     text-align: center;
 }
 
 #secao-principal h1 {
-    margin-bottom: 9px;
-    font-size: clamp(1.5rem, 1rem + 2.5vw, 3rem);
+    max-width: 46rem;
+    margin: 0 auto 0.6rem;
+    font-size: clamp(1.6rem, 4.2vw, 3rem);
     font-weight: 700;
-    line-height: 1.375;
+    line-height: 1.3;
 }
 
 .welcome-text {
-    font-size: var(--fs);
+    max-width: 44rem;
+    margin: 0 auto;
+    font-size: clamp(0.8rem, 1.2vw, 0.95rem);
     line-height: 1.4;
 }
 
 .assistant-wrapper {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 39px;
+    max-width: 44rem;
+    margin: 2.5rem auto 0;
+    text-align: center;
 }
 
-.assistant-wrapper > span {
+.assistant-wrapper span {
     display: inline-block;
-    padding-left: 12px;
+    padding-left: 0.5rem;
     border-left: 2px solid var(--texto);
-    font-size: var(--fs);
-    line-height: 22px;
+    font-size: 0.9rem;
 }
 
-.assistant-wrapper > p {
-    max-width: 420px;
-    margin-top: 2px;
-    font-size: var(--fs);
-    line-height: 1.4;
+.assistant-wrapper p {
+    max-width: 25rem;
+    margin: 0.1rem auto 1rem;
+    font-size: 0.9rem;
+    line-height: 1.35;
 }
 
 .assistant-wrapper input {
     width: 100%;
-    height: 46px;
-    margin-top: 10px;
-    padding: 0 56px;
-    border: 1.5px solid var(--linha-input);
-    border-radius: 23px;
+    height: 2.75rem;
+    padding: 0 3rem;
+    border: 2px solid var(--ia-borda);
+    border-radius: 999px;
     background: transparent;
-    color: var(--texto);
-    font-size: 0.77rem;
+    font-size: 0.72rem;
     text-align: center;
-    text-overflow: ellipsis;
 }
 
-.assistant-wrapper input::placeholder,
-.barra-pergunta input::placeholder,
-#form-adicionar-compromisso textarea::placeholder {
-    color: var(--suave);
-    opacity: 1;
+.assistant-wrapper input::placeholder {
+    color: var(--ia-placeholder);
 }
 
-.assistant-wrapper input:focus-visible {
-    outline-offset: 3px;
-}
-
-/* Seta fica logo apos o placeholder (centralizado), como no Figma */
 .btn-assistant-send {
     position: absolute;
-    bottom: 15px;
-    left: calc(50% + 20ch + 18px);
-    width: 16px;
-    height: 16px;
-    font-size: 0.77rem;
-    line-height: 16px;
-    text-align: center;
-    color: var(--texto);
-    cursor: pointer;
-    user-select: none;
-}
-
-.assistant-wrapper input:not(:placeholder-shown) {
-    padding-left: 24px;
-    text-align: left;
-}
-
-.assistant-wrapper input:not(:placeholder-shown) ~ .btn-assistant-send {
-    left: auto;
-    right: 22px;
-}
-
-/* ---------- Calendario ---------- */
-#calendario {
-    margin-top: 66px;
-}
-
-.calendario-topo {
+    right: 24%;
+    bottom: 0;
     display: flex;
     align-items: center;
+    height: 2.75rem;
+    font-size: 0.85rem;
+    color: var(--ia-placeholder);
+    cursor: pointer;
+}
+
+.btn-assistant-send:hover {
+    color: var(--texto);
+}
+
+/* ---------- 8. Calendário ---------- */
+.calendario-topo {
+    display: flex;
+    align-items: flex-end;
     justify-content: space-between;
-    height: 42px;
-    margin-bottom: 8px;
-    padding-left: 17px;
+    margin-bottom: 0.9rem;
 }
 
 .calendario-topo h2 {
-    margin-top: -8px;
-    font-size: 1.5rem;
-    font-weight: 500;
-    line-height: 1.2;
+    padding-left: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
 }
 
 .botao-adicionar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 30px;
-    padding: 0 12px;
-    border-radius: 8px;
-    background: var(--acento);
-    color: var(--sobre-acento);
-    font-size: 0.77rem;
-    line-height: 1.2;
+    padding: 0.55rem 1rem;
+    border-radius: 0.5rem;
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+    font-size: 0.75rem;
     text-align: center;
-    white-space: nowrap;
+    box-shadow: var(--sombra);
     cursor: pointer;
-    user-select: none;
-    transition: filter 0.15s;
 }
 
 .botao-adicionar:hover {
-    filter: brightness(1.12);
+    filter: var(--filtro-hover-escuro);
 }
 
 .calendario-caixa {
-    padding: 0 24px 28px;
-    border-radius: 32px;
-    background: var(--cartao);
-    box-shadow: var(--sombra-cartao);
+    padding: 0.75rem clamp(0.75rem, 2vw, 1.75rem) 1.5rem;
+    border-radius: 2rem;
+    background: var(--superficie);
+    box-shadow: var(--sombra);
 }
 
 .calendario-mes {
-    position: relative;
-    display: flex;
+    display: grid;
+    grid-template-columns: 2rem 1fr 2rem;
     align-items: center;
-    justify-content: center;
-    height: 72px;
-    margin: 0 -24px;
+    margin-bottom: 0.75rem;
 }
 
 .calendario-mes h3 {
-    font-size: 2.4rem;
-    font-weight: 600;
-    line-height: 1;
+    font-size: clamp(1.3rem, 3vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-align: center;
     text-transform: uppercase;
 }
 
 .seta {
-    position: absolute;
-    top: 50%;
-    left: 12px;
-    padding: 6px;
+    justify-self: center;
+    padding: 0.25rem;
     border: 0;
     background: none;
-    color: var(--seta);
-    font-size: 1.3rem;
-    line-height: 1;
-    cursor: pointer;
-    transform: translateY(-50%);
-    transition: color 0.15s;
-}
-
-#mes-seguinte {
-    left: auto;
-    right: 12px;
+    color: var(--ia-placeholder);
+    font-size: 1.1rem;
 }
 
 .seta:hover {
@@ -418,71 +599,64 @@ span.logo {
 }
 
 .calendario-grade th {
-    height: 72px;
-    padding: 0 0 18px;
-    font-size: 1.6rem;
+    padding: 0.5rem 0 1rem;
+    font-size: clamp(0.65rem, 1.9vw, 1.5rem);
     font-weight: 400;
-    line-height: 1;
-    text-transform: uppercase;
+    text-align: center;
 }
 
 .calendario-grade td {
-    height: 64.5px;
-    padding: 0;
+    padding: 0.15rem 0;
     text-align: center;
-    vertical-align: middle;
 }
 
 .dia {
-    display: grid;
-    place-items: center;
-    width: 58px;
-    height: 58px;
-    margin: 0 auto;
+    display: block;
+    width: clamp(2rem, 4.4vw, 3.5rem);
+    aspect-ratio: 1;
+    margin: 0.25rem auto;
     padding: 0;
     border: 0;
     border-radius: 50%;
     background: transparent;
-    font-size: 1.5rem;
-    font-weight: 500;
-    line-height: 1;
-    cursor: pointer;
-    transition: background-color 0.15s;
+    font-size: clamp(0.85rem, 2.2vw, 1.5rem);
+    font-weight: 700;
 }
 
 .dia:hover {
-    background: var(--hover-dia);
+    background: var(--hover-suave);
 }
 
 .dia-hoje,
 .dia-hoje:hover {
-    background: var(--acento);
-    color: var(--sobre-acento);
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
 }
 
-.dia-hoje:hover {
-    filter: brightness(1.1);
-}
-
-/* ---------- Painel: compromissos de hoje (empilhado por padrao) ---------- */
+/* ---------- 9. Compromissos de hoje (única área com Inter) ---------- */
 #painel-compromissos-hoje {
-    width: 100%;
-    max-width: 420px;
-    margin: 40px auto 0;
+    position: relative;
+    margin-top: 6.5rem;
+    padding: 1.75rem 1rem 1.5rem;
+    border-radius: 1.75rem;
+    background: var(--superficie);
+    box-shadow: var(--sombra);
+    color: var(--texto-compromissos);
+    font-family: var(--fonte-compromissos);
+    scroll-margin-top: 6rem;
 }
 
 #painel-compromissos-hoje h2 {
-    margin-bottom: 4px;
-    font-size: 1.28rem;
-    font-weight: 500;
-    line-height: 1.3;
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    left: 0;
+    margin-bottom: 0.5rem;
+    color: var(--texto);
+    font-family: var(--fonte-principal);
+    font-size: 0.95rem;
+    font-weight: 600;
     text-align: center;
-}
-
-.appointments-list {
-    padding: 14px 22px 0;
-    border-radius: 30px 30px 0 0;
-    background: var(--cartao);
 }
 
 .appointment-item {
@@ -490,214 +664,64 @@ span.logo {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
-    padding: 15px 0 17px;
-    text-align: center;
+    gap: 0.3rem;
+    margin-bottom: 1.4rem;
 }
 
+/* checkbox de conclusão: oculto visualmente, mas acessível por teclado */
 .checkbox-concluir {
     position: absolute;
-    width: 1px;
-    height: 1px;
     opacity: 0;
-    pointer-events: none;
 }
 
 .appointment-text {
-    font-family: var(--sans);
-    font-size: 0.85rem;
+    max-width: 12rem;
+    font-size: 0.8rem;
     font-weight: 500;
-    line-height: 1.2;
+    line-height: 1.35;
+    text-align: center;
     text-wrap: balance;
 }
 
 .btn-concluir {
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-family: var(--sans);
-    font-size: 0.65rem;
-    line-height: 1.2;
+    font-size: 0.55rem;
     cursor: pointer;
-    user-select: none;
-    transition: background-color 0.15s;
 }
 
 .btn-concluir:hover {
-    background: var(--hover-dia);
+    text-decoration: underline;
+}
+
+.checkbox-concluir:focus-visible ~ .btn-concluir {
+    outline: 2px solid var(--btn-claro);
+    outline-offset: 2px;
+}
+
+.checkbox-concluir:checked ~ .appointment-text,
+.checkbox-concluir:checked ~ .btn-concluir {
+    opacity: 0.55;
 }
 
 .checkbox-concluir:checked ~ .appointment-text {
     text-decoration: line-through;
-    opacity: 0.55;
-}
-
-.checkbox-concluir:checked ~ .btn-concluir {
-    font-weight: 600;
-}
-
-.checkbox-concluir:focus-visible ~ .btn-concluir {
-    outline: 2px solid var(--foco);
-    outline-offset: 2px;
 }
 
 .progress-tracker {
-    padding: 14px 22px 26px;
-    border-radius: 0 0 30px 30px;
-    background: var(--cartao);
-    font-family: var(--sans);
+    margin-top: 2rem;
     font-size: 0.85rem;
-    font-weight: 500;
-    text-align: center;
-}
-
-/* ---------- Dropdowns: menu, notificacoes, perfil ---------- */
-.overlay {
-    display: none;
-}
-
-#overlay-menu,
-#overlay-notificacoes,
-#overlay-perfil {
-    position: absolute;
-    z-index: 60;
-    box-shadow: var(--sombra);
-    animation: descer 0.16s ease-out;
-}
-
-#toggle-menu:checked ~ #overlay-menu,
-#toggle-notificacoes:checked ~ #overlay-notificacoes,
-#toggle-perfil:checked ~ #overlay-perfil {
-    display: block;
-}
-
-/* Menu */
-#overlay-menu {
-    top: 55px;
-    left: 0;
-    width: 174px;
-    background: var(--item);
-}
-
-.overlay-nav li > a,
-.overlay-nav li > label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 55px;
-    padding: 6px 8px;
-    background: var(--item);
-    color: var(--texto);
-    font-size: var(--fs);
-    line-height: 1.35;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background-color 0.15s, color 0.15s;
-}
-
-.overlay-nav li > a:hover,
-.overlay-nav li > label:hover,
-.overlay-nav li > a:focus-visible {
-    background: var(--acento);
-    color: var(--sobre-acento);
-}
-
-/* Notificacoes */
-#overlay-notificacoes {
-    top: 65px;
-    right: 149px;
-    width: 296px;
-    border-radius: 0 0 10px 10px;
-    overflow: hidden;
-}
-
-.marcar-lidas {
-    display: block;
-    width: 100%;
-    height: 34px;
-    padding: 0;
-    border: 0;
-    background: var(--acento);
-    color: var(--sobre-acento);
-    font-size: 0.65rem;
     font-weight: 600;
-    cursor: pointer;
-    transition: filter 0.15s;
-}
-
-.marcar-lidas:hover {
-    filter: brightness(1.12);
-}
-
-.notifications-list {
-    padding: 8px 10px 26px;
-    background: var(--item);
     text-align: center;
 }
 
-.notifications-list li + li {
-    margin-top: 22px;
-}
-
-html:has(#toggle-tema:checked) .notifications-list {
-    background: var(--cartao);
-}
-
-/* Perfil */
-#overlay-perfil {
-    top: 65px;
-    right: 17px;
-    width: 218px;
-}
-
-.perfil-caixa {
-    display: flex;
-    flex-direction: column;
-}
-
-.perfil-saudacao {
-    height: 20px;
-    background: var(--acento);
-    color: var(--sobre-acento);
-    font-size: 0.65rem;
-    line-height: 20px;
-    text-align: center;
-}
-
-.perfil-opcao {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 38px;
-    font-size: var(--fs);
-    text-decoration: none;
-    transition: filter 0.15s;
-}
-
-.perfil-opcao:hover {
-    filter: brightness(1.08);
-}
-
-.perfil-editar {
-    background: var(--item);
-    color: var(--texto);
-}
-
-.perfil-sair {
-    background: var(--acento);
-    color: var(--sobre-acento);
-}
-
-/* ---------- Modais: adicionar compromisso e assistente ---------- */
+/* ---------- 10. Sobreposições (modais) e formulário de compromisso ---------- */
 #overlay-adicionar-compromisso,
 #overlay-assistente {
+    display: none;
     position: fixed;
     inset: 0;
-    z-index: 100;
+    z-index: 60;
     place-items: center;
-    padding: 12px;
-    animation: aparecer 0.18s ease-out;
+    padding: 1rem;
 }
 
 #toggle-adicionar:checked ~ #overlay-adicionar-compromisso,
@@ -705,175 +729,155 @@ html:has(#toggle-tema:checked) .notifications-list {
     display: grid;
 }
 
+/* fundo desfocado atrás do modal */
 .overlay-fundo {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.25);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+    background: var(--cortina);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     cursor: pointer;
 }
 
 .overlay-caixa {
     position: relative;
     z-index: 1;
-    display: flex;
-    flex-direction: column;
-    width: min(637px, 100%);
-    height: 524px;
-    max-height: calc(100dvh - 24px);
-    overflow: auto;
-    border-radius: 36px;
-    background: linear-gradient(180deg, var(--modal-topo), var(--modal-base));
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+    width: min(40rem, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 1.4rem 1.6rem 1.5rem;
+    border-radius: 2rem;
+    background: var(--painel);
+    box-shadow: var(--sombra-forte);
 }
 
 .overlay-topo {
     position: relative;
-    flex: none;
-    padding: 56px 20px 0;
-    text-align: center;
+    padding-top: 1.4rem;
 }
 
 .overlay-topo h2 {
-    font-size: 2.5rem;
-    font-weight: 600;
+    font-size: clamp(1.4rem, 3.2vw, 2.3rem);
+    font-weight: 700;
     line-height: 1.2;
+    text-align: center;
+}
+
+/* ícones "edit icon.svg" e "closed icon.svg" (arquivos do projeto),
+   pintados com a cor do tema. Os símbolos de texto do HTML ficam ocultos. */
+.icone-editar,
+.botao-fechar {
+    position: absolute;
+    top: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: var(--icone);
+    font-size: 0;
+    line-height: 0;
+    -webkit-mask: center / contain no-repeat;
+    mask: center / contain no-repeat;
 }
 
 .icone-editar {
-    position: absolute;
-    top: 20px;
-    left: 23px;
-    color: var(--acento);
-    font-size: 1.7rem;
-    line-height: 1;
+    left: 0;
+    -webkit-mask-image: url("./assets/icons%20svg/edit%20icon.svg");
+    mask-image: url("./assets/icons%20svg/edit%20icon.svg");
 }
 
 .botao-fechar {
-    position: absolute;
-    top: 22px;
-    right: 22px;
-    z-index: 2;
-    display: grid;
-    place-items: center;
-    width: 26px;
-    height: 26px;
-    border: 2px solid var(--acento);
-    border-radius: 50%;
-    color: var(--acento);
-    font-size: 0.62rem;
-    line-height: 1;
+    right: 0;
     cursor: pointer;
-    transition: background-color 0.15s, color 0.15s;
+    -webkit-mask-image: url("./assets/icons%20svg/closed%20icon.svg");
+    mask-image: url("./assets/icons%20svg/closed%20icon.svg");
 }
 
 .botao-fechar:hover {
-    background: var(--acento);
-    color: var(--sobre-acento);
+    background-color: var(--btn-claro);
 }
 
-/* Formulario de compromisso */
+/* formulário do compromisso */
 #form-adicionar-compromisso {
-    flex: 1;
     display: grid;
-    grid-template-columns: minmax(140px, 166px) minmax(0, 1fr);
-    column-gap: 73px;
-    align-content: start;
-    padding: 71px 55px 41px 20px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    grid-template-rows: repeat(4, auto);
+    column-gap: 2rem;
+    row-gap: 0.6rem;
+    margin-top: 1.25rem;
 }
 
 #form-adicionar-compromisso .campo {
     grid-column: 1;
-    display: flex;
-    flex-direction: column;
-    height: 64px;
 }
 
 #form-adicionar-compromisso .campo label {
-    font-size: 1.25rem;
-    line-height: 24px;
+    color: var(--texto);
+    font-size: 1rem;
 }
 
 #form-adicionar-compromisso .campo input,
 #form-adicionar-compromisso .campo select {
-    width: 100%;
-    height: 30px;
-    padding: 0;
-    border: 0;
-    border-bottom: 1.5px dotted var(--texto);
-    border-radius: 0;
-    background: transparent;
-    font-size: 1rem;
-}
-
-#form-adicionar-compromisso .campo select {
-    cursor: pointer;
+    min-height: 2rem;
+    border-bottom: 2px dotted var(--texto);
 }
 
 #form-adicionar-compromisso .campo-descricao {
     grid-column: 2;
     grid-row: 1 / span 4;
-    height: auto;
-    margin-top: -27px;
+    height: 100%;
 }
 
-#form-adicionar-compromisso .campo-descricao label {
-    margin-left: 10px;
-    margin-bottom: 3px;
-}
-
-#form-adicionar-compromisso textarea {
-    flex: none;
-    width: 100%;
-    height: 259px;
-    padding: 12px;
+#form-adicionar-compromisso .campo-descricao textarea {
+    flex: 1;
+    min-height: 11rem;
+    padding: 1rem;
     border: 0;
-    border-radius: 22px;
-    background: var(--acento);
-    color: #fff;
-    font-size: 1.25rem;
-    line-height: 1.3;
+    border-radius: 1rem;
+    background: var(--campo-escuro);
+    color: var(--sobre-btn);
+    font-size: 0.95rem;
     resize: none;
 }
 
+#form-adicionar-compromisso textarea::placeholder {
+    color: var(--campo-placeholder);
+}
+
 .botao-salvar {
-    grid-column: 1 / -1;
-    justify-self: end;
-    height: 29px;
-    margin-top: 23px;
-    padding: 0 18px;
+    padding: 0.45rem 1.1rem;
     border: 0;
-    border-radius: 8px;
-    background: var(--acento);
-    color: var(--sobre-acento);
+    border-radius: 0.5rem;
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
     font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: filter 0.15s;
+    font-weight: 700;
+    box-shadow: var(--sombra);
 }
 
 .botao-salvar:hover {
-    filter: brightness(1.12);
+    filter: var(--filtro-hover-escuro);
 }
 
-/* Chat do assistente */
+#form-adicionar-compromisso .botao-salvar {
+    grid-column: 2;
+    grid-row: 5;
+    justify-self: end;
+    margin-top: 0.4rem;
+}
+
+/* ---------- 11. Assistente de IA ---------- */
 .chat {
-    flex: 1;
-    min-height: 0;
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    padding: 34px 19px 10px;
+    gap: 0.9rem;
+    max-height: 50vh;
+    margin: 1.25rem 0 1rem;
     overflow-y: auto;
-    scrollbar-width: thin;
 }
 
 .mensagem {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    max-width: 100%;
+    gap: 0.3rem;
 }
 
 .mensagem-usuario {
@@ -884,721 +888,457 @@ html:has(#toggle-tema:checked) .notifications-list {
     align-items: flex-start;
 }
 
-.remetente {
-    position: relative;
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 8px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    line-height: 1.1;
-    text-transform: uppercase;
+/* os <img> do HTML ficam ocultos e os mesmos arquivos SVG
+   ("user icon.svg" e "robot icon.svg") são desenhados por máscara,
+   para poder usar a cor do tema */
+.remetente img {
+    display: none;
 }
 
 .mensagem-usuario .remetente {
-    margin-right: 40px;
-    background: var(--acento);
-    color: var(--sobre-acento);
+    position: relative;
+    display: inline-block;
+    margin-right: 2rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 0.4rem;
+    background: var(--chip-usuario);
+    color: var(--sobre-btn);
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1.3;
+    text-transform: uppercase;
+}
+
+.mensagem-usuario .remetente::after,
+.mensagem-assistente .remetente::before {
+    content: '';
+    position: absolute;
+    background-color: var(--icone);
+    -webkit-mask: center / contain no-repeat;
+    mask: center / contain no-repeat;
+}
+
+.mensagem-usuario .remetente::after {
+    top: 50%;
+    left: 100%;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-left: 0.35rem;
+    transform: translateY(-50%);
+    -webkit-mask-image: url("./assets/icons%20svg/user%20icon.svg");
+    mask-image: url("./assets/icons%20svg/user%20icon.svg");
 }
 
 .mensagem-assistente .remetente {
-    margin-left: 40px;
-    background: var(--tag-ia);
-    color: #fff;
+    position: relative;
+    display: block;
+    width: 1.8rem;
+    height: 1.8rem;
 }
 
-/* Rotulo "Assistente" gerado por CSS (o HTML so traz o icone) */
 .mensagem-assistente .remetente::before {
-    content: "Assistente";
-}
-
-.icone-usuario,
-.icone-robo {
-    position: absolute;
-    top: 50%;
-    width: 30px;
-    height: 30px;
-    transform: translateY(-50%);
-}
-
-.icone-usuario {
-    left: 100%;
-    margin-left: 6px;
-}
-
-.icone-robo {
-    right: 100%;
-    margin-right: 6px;
+    inset: 0;
+    -webkit-mask-image: url("./assets/icons%20svg/robot%20icon.svg");
+    mask-image: url("./assets/icons%20svg/robot%20icon.svg");
 }
 
 .mensagem p {
-    width: fit-content;
-    max-width: 70%;
-    padding: 6px 9px;
-    border-radius: 8px;
-    font-size: 0.77rem;
+    max-width: 92%;
+    padding: 0.45rem 0.7rem;
+    border-radius: 0.5rem;
+    color: var(--texto-balao);
+    font-size: 0.78rem;
     line-height: 1.4;
-    overflow-wrap: anywhere;
 }
 
 .mensagem-usuario p {
-    background: var(--bolha-user);
-    color: var(--texto-user);
+    background: var(--balao-usuario);
+    text-align: right;
 }
 
 .mensagem-assistente p {
-    background: var(--bolha-ia);
-    color: var(--texto-ia);
+    background: var(--balao-assistente);
+    text-align: left;
 }
 
 .barra-pergunta {
-    position: relative;
-    flex: none;
     display: flex;
     align-items: center;
-    width: min(496px, calc(100% - 100px));
-    height: 30px;
-    margin: 6px auto 17px;
-    border: 1px solid var(--acento);
-    border-radius: 15px;
+    margin: 0 0.5rem;
+    padding: 0.2rem 0.9rem;
+    border: 1.5px solid var(--ia-borda);
+    border-radius: 999px;
+}
+
+.barra-pergunta:focus-within {
+    border-color: var(--btn-claro);
 }
 
 .barra-pergunta input {
     flex: 1;
     min-width: 0;
-    height: 100%;
-    padding: 0 36px;
+    padding: 0.35rem;
     border: 0;
-    background: transparent;
-    font-size: 0.68rem;
+    outline: 0;
+    background: none;
+    font-size: 0.7rem;
     text-align: center;
 }
 
-.barra-pergunta input:focus-visible {
-    outline: none;
-}
-
-.barra-pergunta:focus-within {
-    outline: 2px solid var(--foco);
-    outline-offset: 2px;
+.barra-pergunta input::placeholder {
+    color: var(--ia-placeholder);
 }
 
 .barra-pergunta button {
-    position: absolute;
-    right: 12px;
-    padding: 4px;
+    padding: 0;
     border: 0;
     background: none;
-    color: var(--acento);
+    color: var(--ia-placeholder);
     font-size: 0.8rem;
-    line-height: 1;
-    cursor: pointer;
 }
 
-/* ---------- Login ---------- */
-.pagina-editar-perfil {
-    --fundo-topo: #aeb0af;
-    --fundo-base: #7f9a9b;
+.barra-pergunta button:hover {
+    color: var(--texto);
 }
 
-#conteudo-login,
-#conteudo-editar-perfil {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
+/* ---------- 12. Campos, login e editar perfil ---------- */
+.campo {
     display: flex;
-    padding: 70px 11px;
-    overflow: auto;
+    flex-direction: column;
+    gap: 0.15rem;
+    text-align: left;
+}
+
+.campo label {
+    color: var(--ia-placeholder);
+    font-size: 0.8rem;
+}
+
+.campo input,
+.campo select {
+    width: 100%;
+    min-height: 1.8rem;
+    padding: 0.3rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--linha);
+    border-radius: 0;
+    background: transparent;
+    outline: none;
+}
+
+.campo input:focus,
+.campo select:focus {
+    border-bottom-color: var(--btn-claro);
+}
+
+.campo select option {
+    background: var(--painel);
+    color: var(--texto);
+}
+
+/* centraliza o cartão na tela (sem barra de topo) */
+.pagina-login #conteudo-login,
+.pagina-editar-perfil #conteudo-editar-perfil {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin-top: calc(-1 * var(--h-cab));
+    padding: var(--h-cab) 1rem 1rem;
 }
 
 .caixa-login,
 .caixa-editar-perfil {
-    position: relative;
-    width: min(637px, 100%);
-    margin: auto;
-    border-radius: 36px;
-    background: linear-gradient(180deg, var(--modal-topo), var(--modal-base));
-    box-shadow: -3px 6px 12px rgba(0, 0, 0, 0.28);
+    width: min(40rem, 100%);
+    padding: 2rem clamp(1.25rem, 8vw, 4.5rem) 2.5rem;
+    border-radius: 2.5rem;
+    background: var(--painel);
+    box-shadow: var(--sombra-forte);
 }
 
 .caixa-login {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 524px;
-    padding: 41px 40px 40px;
 }
 
-/* No HTML o h1 tem .sr-only; no design ele e visivel */
-.caixa-login .sr-only {
+/* o h1 do login está com .sr-only no HTML; o design o exibe */
+.pagina-login h1.sr-only {
     position: static;
     order: -1;
     width: auto;
     height: auto;
-    margin: 0 0 35px;
+    margin: 0 0 1.25rem;
     overflow: visible;
     clip: auto;
     clip-path: none;
     white-space: normal;
-    font-size: 2.5rem;
-    font-weight: 600;
+    font-size: clamp(1.5rem, 5vw, 2.4rem);
+    font-weight: 700;
     line-height: 1.2;
     text-align: center;
 }
 
+/* ícone do login: mesmo arquivo "user icon.svg", cor do tema */
 .icone-login {
-    width: 130px;
-    height: 130px;
+    display: none;
+}
+
+.caixa-login::before {
+    content: '';
+    width: clamp(5rem, 16vw, 8rem);
+    aspect-ratio: 1;
+    margin: 0.5rem 0 1.75rem;
+    background-color: var(--icone);
+    -webkit-mask: url("./assets/icons%20svg/user%20icon.svg") center / contain no-repeat;
+    mask: url("./assets/icons%20svg/user%20icon.svg") center / contain no-repeat;
 }
 
 #form-login {
-    width: 100%;
-    max-width: 454px;
-    margin-top: 42px;
-}
-
-#form-login .campo {
     display: flex;
     flex-direction: column;
-    margin-bottom: 22px;
-}
-
-#form-login .campo label {
-    color: var(--suave);
-    font-size: 1.15rem;
-    font-weight: 500;
-    line-height: 20px;
-}
-
-#form-login .campo input {
-    height: 24px;
-    padding: 0;
-    border: 0;
-    border-bottom: 1px solid var(--suave);
-    border-radius: 0;
-    background: transparent;
-    font-size: 1.1rem;
-}
-
-#form-login .campo input:focus-visible {
-    outline: none;
-    border-bottom-color: var(--acento);
-    box-shadow: 0 1px 0 var(--acento);
+    gap: 1.1rem;
+    width: 100%;
 }
 
 .botao-entrar {
-    display: block;
-    width: 184px;
-    height: 46px;
-    margin: 10px auto 0;
+    align-self: center;
+    margin-top: 0.5rem;
+    padding: 0.7rem 2.5rem;
     border: 0;
-    border-radius: 10px;
-    background: var(--acento);
-    color: var(--sobre-acento);
-    font-size: 1.25rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
+    border-radius: 0.5rem;
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    cursor: pointer;
-    transition: filter 0.15s;
+    box-shadow: var(--sombra);
 }
 
 .botao-entrar:hover {
-    filter: brightness(1.12);
+    filter: var(--filtro-hover-escuro);
 }
 
-/* ---------- Editar perfil (pagina propria, desenhada como sobreposicao) ---------- */
-.caixa-editar-perfil {
-    display: flex;
-    flex-direction: column;
-    min-height: 372px;
-    padding: 17px 0 18px;
-}
-
+/* editar perfil */
 .caixa-editar-perfil h1 {
-    font-size: 2.5rem;
-    font-weight: 600;
-    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    font-size: clamp(1.5rem, 5vw, 2.4rem);
+    font-weight: 700;
     text-align: center;
-    text-transform: capitalize;
+}
+
+/* a tela aparece como janela sobre um fundo levemente escurecido */
+.pagina-editar-perfil::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: var(--cortina);
+}
+
+.pagina-editar-perfil #conteudo-editar-perfil {
+    position: relative;
+    z-index: 1;
+}
+
+.caixa-editar-perfil {
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
 }
 
 #form-editar-perfil {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 230px minmax(0, 1fr);
-    grid-template-rows: auto auto auto 1fr;
-    column-gap: 37px;
-    padding: 36px 68px 18px 29px;
-}
-
-#form-editar-perfil .campo-foto {
-    grid-row: 1 / 5;
     display: flex;
     flex-direction: column;
+    gap: 1.1rem;
+}
+
+.campo-foto {
     align-items: center;
-    margin-top: 20px;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
 }
 
 .icone-foto {
-    flex: none;
-    width: 132px;
-    height: 151px;
-    color: var(--acento);
+    width: 5.5rem;
+    height: 5.5rem;
+    color: var(--icone);
 }
 
-.campo-foto label {
-    margin-top: 38px;
-    color: var(--acento);
-    font-size: var(--fs);
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.campo-foto input[type="file"] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.campo-foto:focus-within label {
-    outline: 2px solid var(--foco);
-    outline-offset: 3px;
-}
-
-#form-editar-perfil .campo:not(.campo-foto) {
-    grid-column: 2;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    min-height: 28px;
-    margin-bottom: 8px;
-}
-
-#form-editar-perfil .campo:not(.campo-foto) label {
-    font-size: var(--fs);
-    line-height: 1.2;
-}
-
-#form-editar-perfil .campo:not(.campo-foto) label::after {
-    content: ":";
-}
-
-#form-editar-perfil .campo:not(.campo-foto) input {
-    flex: 0 1 152px;
-    min-width: 0;
-    height: 28px;
-    padding: 0 10px;
+.campo-foto input[type='file'] {
+    width: auto;
+    min-height: 0;
     border: 0;
-    border-radius: 8px;
-    background: var(--campo);
+    color: var(--ia-placeholder);
     font-size: 0.8rem;
 }
 
-.acoes-formulario {
-    grid-column: 2;
-    grid-row: 4;
-    align-self: end;
-    justify-self: end;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-right: -44px;
-    padding-top: 0;
+.campo-foto input[type='file']::file-selector-button {
+    margin-right: 0.6rem;
+    padding: 0.4rem 0.8rem;
+    border: 0;
+    border-radius: 0.4rem;
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+    font: inherit;
+    cursor: pointer;
+    transition: filter 0.15s ease;
 }
 
-.acoes-formulario .botao-salvar {
-    margin-top: 0;
+.campo-foto input[type='file']::file-selector-button:hover {
+    filter: var(--filtro-hover-escuro);
+}
+
+.acoes-formulario {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.25rem;
+}
+
+.acoes-formulario .botao-salvar,
+.botao-cancelar {
+    padding: 0.7rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
 }
 
 .botao-cancelar {
-    cursor: pointer;
+    border: 2px solid var(--ia-borda);
     color: var(--texto);
-    font-size: 0.78rem;
-    font-weight: 600;
     text-decoration: none;
 }
 
 .botao-cancelar:hover {
-    text-decoration: underline;
+    background: var(--hover-suave);
 }
 
-/* Botao X: pseudo-elemento do link "Cancelar" (clicavel, volta ao index) */
-.caixa-editar-perfil .botao-cancelar::after {
-    content: "\2716";
-    content: "\2716" / "";
-    position: absolute;
-    top: 17px;
-    right: 21px;
-    display: grid;
-    place-items: center;
-    width: 26px;
-    height: 26px;
-    border: 2px solid var(--acento);
-    border-radius: 50%;
-    color: var(--acento);
-    font-size: 0.62rem;
-    line-height: 1;
-    text-decoration: none;
-}
-
-.caixa-editar-perfil .botao-cancelar:hover::after {
-    background: var(--acento);
-    color: var(--sobre-acento);
-}
-
-/* ---------- Editar perfil como modal (exige o bloco #overlay-editar-perfil no index.html) ---------- */
-#overlay-editar-perfil {
-    position: fixed;
-    inset: 0;
-    z-index: 110;
-    place-items: center;
-    padding: 12px;
-    animation: aparecer 0.18s ease-out;
-}
-
-#toggle-editar-perfil:checked ~ #overlay-editar-perfil {
-    display: grid;
-}
-
-#overlay-editar-perfil .overlay-caixa {
-    height: 372px;
-}
-
-#overlay-editar-perfil .overlay-topo {
-    padding-top: 17px;
-}
-
-#overlay-editar-perfil .overlay-topo h2 {
-    text-transform: capitalize;
-}
-
-#overlay-editar-perfil .botao-fechar {
-    top: 17px;
-    right: 21px;
-}
-
-/* Ao abrir o modal, o dropdown do perfil some e o botao Perfil volta ao normal */
-#toggle-editar-perfil:checked ~ #overlay-perfil {
-    display: none;
-}
-
-#toggle-editar-perfil:checked ~ #cabecalho label[for="toggle-perfil"] {
-    height: 50px;
-    border-radius: 25px;
-    background: var(--pilula);
-    color: var(--texto);
-    box-shadow: var(--sombra);
-}
-
-/* ---------- Animacoes ---------- */
-@keyframes aparecer {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes descer {
-    from { opacity: 0; transform: translateY(-4px); }
-    to { opacity: 1; transform: none; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation: none !important;
-        transition: none !important;
-        scroll-behavior: auto !important;
-    }
-}
-
-/* ==========================================================================
-   Desktop >= 1280px: calendario centralizado + painel ao lado
-   ========================================================================== */
-@media (min-width: 1280px) {
-    #conteudo-principal {
-        width: auto;
-        grid-template-columns: minmax(0, 1fr) 696px minmax(0, 1fr);
-        padding-bottom: 80px;
+/* ---------- 13. Responsivo (mobile) ---------- */
+@media (max-width: 860px) {
+    body {
+        --h-cab: 4.5rem;
+        --pilula-h: 2.5rem;
     }
 
-    #secao-principal,
-    #calendario {
-        grid-column: 2;
-    }
-
-    #painel-compromissos-hoje {
-        grid-column: 3;
-        grid-row: 2;
-        align-self: start;
-        width: 246px;
-        margin: 78px 0 0 29px;
-    }
-}
-
-/* ==========================================================================
-   Celular <= 700px
-   ========================================================================== */
-@media (max-width: 700px) {
-    #cabecalho,
-    #cabecalho-login,
-    #cabecalho-editar-perfil {
-        height: 85px;
-    }
-
-    .logo {
-        height: 85px;
+    #cabecalho {
+        padding-right: 1rem;
     }
 
     .cabecalho-acoes {
-        gap: 10px;
-        margin: 26px 29px 0 0;
+        gap: 0.75rem;
     }
 
-    .botao-cabecalho {
-        width: 74px;
-        height: 42px;
-        border-radius: 21px;
+    .botao-cabecalho,
+    .botao-perfil {
+        width: 3.4rem;
+    }
+
+    .botao-cabecalho .rotulo {
+        display: none;
     }
 
     .botao-cabecalho .icone {
         display: block;
     }
 
-    .botao-cabecalho .rotulo {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0 0 0 0);
-        clip-path: inset(50%);
-        white-space: nowrap;
-    }
-
     #toggle-notificacoes:checked ~ #cabecalho label[for="toggle-notificacoes"],
     #toggle-perfil:checked ~ #cabecalho label[for="toggle-perfil"] {
-        height: 54px;
-        border-radius: 37px 37px 0 0;
+        border-radius: 1.7rem 1.7rem 0 0;
     }
 
-    /* Dropdowns ocupam a largura toda */
-    #overlay-menu {
-        top: 85px;
-        right: 0;
-        width: auto;
-    }
-
-    .overlay-nav li > a,
-    .overlay-nav li > label {
-        font-size: 1.19rem;
-    }
-
+    /* menus ocupam a largura toda */
+    #overlay-menu,
     #overlay-notificacoes,
     #overlay-perfil {
-        top: 80px;
         right: 0;
         left: 0;
         width: auto;
+        border-radius: 0;
+    }
+
+    .overlay-nav a,
+    .overlay-nav label {
+        padding: 1rem 0.6rem;
+        font-size: 1rem;
     }
 
     .marcar-lidas {
-        height: 42px;
-        font-size: 0.7rem;
+        padding: 0.7rem;
     }
 
-    .notifications-list {
-        padding: 10px 10px 26px;
+    .notification-item {
+        font-size: 0.85rem;
     }
 
     .perfil-saudacao {
-        height: 21px;
-        font-size: 0.95rem;
-        line-height: 21px;
+        font-size: 0.7rem;
     }
 
     .perfil-opcao {
-        height: 54px;
-        font-size: 1.19rem;
+        padding: 0.9rem;
+        font-size: 1rem;
     }
 
-    /* Pagina inicial */
+    /* conteúdo em uma coluna */
     #conteudo-principal {
-        width: min(296px, calc(100% - 32px));
-        padding-bottom: 48px;
+        display: block;
     }
 
     #secao-principal {
-        padding-top: 91px;
-    }
-
-    #secao-principal h1 {
-        margin-bottom: 12px;
-        line-height: 1.375;
-    }
-
-    .welcome-text {
-        font-size: 0.77rem;
-        line-height: 1.4;
+        margin-bottom: 2.5rem;
+        padding-top: 1rem;
     }
 
     .assistant-wrapper {
-        margin-top: 30px;
+        margin-top: 1.75rem;
     }
 
-    .assistant-wrapper > span,
-    .assistant-wrapper > p {
-        font-size: 0.77rem;
-    }
-
-    .assistant-wrapper > span {
-        line-height: 18px;
+    .assistant-wrapper span,
+    .assistant-wrapper p {
+        font-size: 0.75rem;
     }
 
     .assistant-wrapper input {
-        height: 35px;
-        margin-top: 12px;
-        padding: 0 34px 0 14px;
-        border-radius: 18px;
+        height: 2.25rem;
+        padding: 0 2.5rem 0 1rem;
         font-size: 0.6rem;
     }
 
     .btn-assistant-send {
-        bottom: 10px;
-        left: auto;
-        right: 14px;
+        right: 1.1rem;
+        height: 2.25rem;
         font-size: 0.7rem;
     }
 
-    .assistant-wrapper input:not(:placeholder-shown) ~ .btn-assistant-send {
-        right: 14px;
-    }
-
-    #calendario {
-        width: 90%;
-        margin: 110px auto 0;
-    }
-
-    .calendario-topo {
-        height: 30px;
-        margin-bottom: 4px;
-        padding-left: 4px;
-    }
-
     .calendario-topo h2 {
-        margin-top: 0;
-        font-size: 1.15rem;
-    }
-
-    .botao-adicionar {
-        height: auto;
-        min-height: 28px;
-        max-width: 96px;
-        padding: 4px 8px;
-        font-size: 0.6rem;
-        line-height: 1.15;
-        white-space: normal;
-    }
-
-    .calendario-caixa {
-        padding: 0 16px 20px;
-        border-radius: 30px;
-    }
-
-    .calendario-mes {
-        height: 52px;
-        margin: 0 -16px;
-    }
-
-    .calendario-mes h3 {
-        font-size: 1.4rem;
-    }
-
-    .seta {
-        left: 4px;
         font-size: 1rem;
     }
 
-    #mes-seguinte {
-        left: auto;
-        right: 4px;
-    }
-
-    .calendario-grade th {
-        height: 32px;
-        padding: 0;
-        font-size: 0.66rem;
-    }
-
-    .calendario-grade td {
-        height: 39.5px;
-    }
-
-    .dia {
-        width: 30px;
-        height: 30px;
-        font-size: 0.83rem;
+    .botao-adicionar {
+        max-width: 6.8rem;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.6rem;
     }
 
     #painel-compromissos-hoje {
-        width: 90%;
-        max-width: none;
-        margin: 41px auto 0;
+        margin-top: 4rem;
     }
 
-    #painel-compromissos-hoje h2 {
-        margin-bottom: 11px;
-        font-size: 1.14rem;
-    }
-
-    .appointments-list {
-        padding: 12px 16px 0;
-    }
-
-    .appointment-text,
-    .progress-tracker {
-        font-size: 0.78rem;
-    }
-
-    /* Modais */
+    /* modais */
     .overlay-caixa {
-        width: min(100%, 420px);
-        height: min(629px, calc(100dvh - 24px));
-        border-radius: 32px;
-    }
-
-    .overlay-topo {
-        padding: 36px 16px 0;
-    }
-
-    .overlay-topo h2 {
-        font-size: 1.6rem;
-        line-height: 1.4;
-    }
-
-    #overlay-assistente .overlay-topo h2 {
-        text-align: left;
-    }
-
-    .icone-editar {
-        top: 20px;
-        left: 20px;
-    }
-
-    .botao-fechar {
-        top: 21px;
-        right: 17px;
+        padding: 1.1rem 1rem 1.25rem;
+        border-radius: 1.75rem;
     }
 
     #form-adicionar-compromisso {
         grid-template-columns: 1fr 1fr;
-        column-gap: 19px;
-        padding: 33px 13px 20px;
+        grid-template-rows: none;
+        column-gap: 1rem;
     }
 
     #form-adicionar-compromisso .campo {
-        height: 53px;
+        grid-column: auto;
     }
 
     #form-adicionar-compromisso .campo:nth-child(3),
@@ -1606,153 +1346,23 @@ html:has(#toggle-tema:checked) .notifications-list {
         grid-column: 1 / -1;
     }
 
-    #form-adicionar-compromisso .campo label {
-        font-size: var(--fs);
-        line-height: 20px;
-    }
-
-    #form-adicionar-compromisso .campo input,
-    #form-adicionar-compromisso .campo select {
-        height: 28px;
-    }
-
     #form-adicionar-compromisso .campo-descricao {
         grid-column: 1 / -1;
         grid-row: auto;
-        margin-top: 12px;
+        height: auto;
     }
 
-    #form-adicionar-compromisso .campo-descricao label {
-        margin-left: 2px;
+    #form-adicionar-compromisso .campo label {
+        font-size: 0.8rem;
     }
 
-    #form-adicionar-compromisso textarea {
-        font-size: var(--fs);
+    #form-adicionar-compromisso .botao-salvar {
+        grid-column: 1 / -1;
+        grid-row: auto;
     }
 
-    .botao-salvar {
-        margin-top: 17px;
-    }
-
-    .chat {
-        padding: 22px 13px 10px;
-    }
-
-    .mensagem p {
-        max-width: 82%;
-    }
-
-    .barra-pergunta {
-        width: calc(100% - 26px);
-        margin-bottom: 20px;
-    }
-
-    /* Login e editar perfil */
     .caixa-login,
     .caixa-editar-perfil {
-        width: min(100%, 420px);
-        border-radius: 32px;
-    }
-
-    .caixa-login {
-        min-height: 629px;
-        padding: 24px 33px 40px;
-    }
-
-    .caixa-login .sr-only {
-        margin-bottom: 50px;
-        font-size: 1.6rem;
-        line-height: 1.55;
-    }
-
-    #form-login {
-        margin-top: 40px;
-    }
-
-    .caixa-editar-perfil {
-        min-height: 486px;
-        padding-top: 22px;
-    }
-
-    .caixa-editar-perfil h1 {
-        font-size: 1.6rem;
-    }
-
-    #form-editar-perfil {
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-rows: none;
-        padding: 28px 30px 0 40px;
-    }
-
-    #form-editar-perfil .campo-foto {
-        grid-row: auto;
-        grid-column: 1;
-        margin: 0 0 24px;
-    }
-
-    #form-editar-perfil .campo:not(.campo-foto) {
-        grid-column: 1;
-    }
-
-    .acoes-formulario {
-        grid-column: 1;
-        grid-row: auto;
-        margin-right: -12px;
-        padding-top: 14px;
-    }
-
-    .caixa-editar-perfil .botao-cancelar::after {
-        top: 24px;
-        right: 18px;
-    }
-}
-
-/* ==========================================================================
-   Celular pequeno <= 400px
-   ========================================================================== */
-@media (max-width: 400px) {
-    .logo {
-        padding: 0 14px;
-        font-size: 1.25rem;
-    }
-
-    .cabecalho-acoes {
-        gap: 8px;
-        margin-right: 14px;
-    }
-
-    .botao-cabecalho {
-        width: 58px;
-    }
-
-    #toggle-notificacoes:checked ~ #cabecalho label[for="toggle-notificacoes"],
-    #toggle-perfil:checked ~ #cabecalho label[for="toggle-perfil"] {
-        border-radius: 29px 29px 0 0;
-    }
-
-    .caixa-login {
-        padding-left: 24px;
-        padding-right: 24px;
-    }
-}
-
-/* Editar perfil (modal) - ajustes de celular */
-@media (max-width: 700px) {
-    #overlay-editar-perfil .overlay-caixa {
-        height: min(486px, calc(100dvh - 24px));
-    }
-
-    #overlay-editar-perfil .overlay-topo {
-        padding-top: 22px;
-    }
-
-    #overlay-editar-perfil .botao-fechar {
-        top: 24px;
-        right: 18px;
-    }
-
-    #toggle-editar-perfil:checked ~ #cabecalho label[for="toggle-perfil"] {
-        height: 42px;
-        border-radius: 21px;
+        border-radius: 2rem;
     }
 }
