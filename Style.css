@@ -3,66 +3,87 @@
    Páginas: index.html, login.html, editar-perfil.html
    Somente CSS: nenhum HTML/JS foi alterado.
 
+   ESCALA: as medidas vêm do Figma (desktop 1920 px, mobile 560 px).
+   Cada "1 unidade" do design vale --u; assim a tela inteira
+   mantém as proporções do Figma em qualquer largura.
+
    Índice
    1. Fontes
-   2. Tema claro (variáveis)
-   3. Tema escuro (variáveis)
-   4. Base e utilitários
-   5. Topo: logo, Notificações e Perfil
-   6. Menu e menus suspensos
-   7. Página principal (index)
-   8. Calendário
-   9. Compromissos de hoje
-   10. Sobreposições (modais) e formulário de compromisso
-   11. Assistente de IA
-   12. Campos, login e editar perfil
-   13. Responsivo (mobile)
+   2. Tema claro / escuro (variáveis)
+   3. Base e utilitários
+   4. Topo: logo, Notificações e Perfil
+   5. Menu e menus suspensos
+   6. Página principal (index)
+   7. Calendário
+   8. Compromissos de hoje
+   9. Modais e formulário de compromisso
+   10. Assistente de IA
+   11. Campos, login e editar perfil
+   12. Mobile
    ========================================================= */
 
-/* ---------- 1. Fontes ----------
-   Intel One Mono: fonte principal (títulos, subtítulos e corpo).
-   Carregada dos arquivos estáticos do pacote @fontsource (jsDelivr): a versão
-   do Google Fonts desmontava os acentos (á, ã, õ ficavam soltos da letra).
-   Inter: usada somente dentro do quadro "Compromissos de hoje". */
-@import url('https://cdn.jsdelivr.net/npm/@fontsource/intel-one-mono@5.3.0/400.css');
-@import url('https://cdn.jsdelivr.net/npm/@fontsource/intel-one-mono@5.3.0/600.css');
-@import url('https://cdn.jsdelivr.net/npm/@fontsource/intel-one-mono@5.3.0/700.css');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* ---------- 1. Fontes ----------
+   Intel One Mono: fonte principal, arquivos oficiais da Intel (versão fixada
+   no repositório intel/intel-one-mono, servidos pelo jsDelivr). As versões do
+   Google Fonts e do @fontsource desenhavam os acentos (á, ã, ê, õ) soltos e
+   altos demais; estes arquivos oficiais desenham tudo certo.
+   Pesos: 300 Light, 400 Regular (corpo), 500-600 Medium (subtítulos), 700 Bold (títulos).
+   Inter: somente dentro do quadro "Compromissos de hoje". */
+@font-face {
+    font-family: 'Intel One Mono';
+    font-weight: 300;
+    font-display: swap;
+    src: url('https://cdn.jsdelivr.net/gh/intel/intel-one-mono@bb82cecf4b2656a7a023d3cc2d1b1af5df4becc8/fonts/woff2/IntelOneMono-Light.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Intel One Mono';
+    font-weight: 400;
+    font-display: swap;
+    src: url('https://cdn.jsdelivr.net/gh/intel/intel-one-mono@bb82cecf4b2656a7a023d3cc2d1b1af5df4becc8/fonts/woff2/IntelOneMono-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Intel One Mono';
+    font-weight: 500 600;
+    font-display: swap;
+    src: url('https://cdn.jsdelivr.net/gh/intel/intel-one-mono@bb82cecf4b2656a7a023d3cc2d1b1af5df4becc8/fonts/woff2/IntelOneMono-Medium.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Intel One Mono';
+    font-weight: 700;
+    font-display: swap;
+    src: url('https://cdn.jsdelivr.net/gh/intel/intel-one-mono@bb82cecf4b2656a7a023d3cc2d1b1af5df4becc8/fonts/woff2/IntelOneMono-Bold.woff2') format('woff2');
+}
+
 
 /* ---------- 2. Tema claro (padrão) ----------
    Gradientes: o "90°" do Figma corresponde a 0deg no CSS
    (0% embaixo, 100% em cima), igual às imagens de referência. */
 body {
+    --u: clamp(0.44px, calc(100vw / 1920), 1.5px);
+
     --fonte-principal: 'Intel One Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
     --fonte-compromissos: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-    --h-cab: 3.75rem;
-    --pilula-h: 2.75rem;
-
-    /* fundo geral */
     --fundo: linear-gradient(0deg, #A4C3C4 0%, #EEEEEE 60%);
 
-    /* textos */
     --texto: #4E5554;
     --texto-compromissos: #4E5554;
     --sobre-btn: #F3FFFD;
     --logo: #4E5554;
 
-    /* ícones */
     --icone: #576C6D;
     --icone-ativo: #F3FFFD;
 
-    /* botões */
     --btn-padrao: linear-gradient(0deg, rgba(255, 248, 238, 0.5) 0%, #EFF3E9 100%);
     --btn-claro: #576C6D;
 
-    /* hover: um pouco mais escuro */
-    --hover-img-pilula: var(--btn-padrao);
-    --hover-img-item: none;
-    --filtro-hover-padrao: brightness(0.92);
-    --filtro-hover-escuro: brightness(0.85);
+    --hover: brightness(0.9);
 
-    /* superfícies (extraídas do Figma onde o template não define) */
     --painel: #FFF8EE;
     --superficie: rgba(242, 241, 237, 0.76);
     --campo-escuro: #576C6D;
@@ -71,11 +92,9 @@ body {
     --hover-suave: rgba(87, 108, 109, 0.16);
     --cortina: rgba(78, 85, 84, 0.35);
 
-    /* barra "Pergunte a seu assistente" */
     --ia-borda: rgba(87, 108, 109, 0.55);
     --ia-placeholder: rgba(97, 118, 117, 0.7);
 
-    /* chat */
     --balao-usuario: #B1C8C9;
     --balao-assistente: #91A3A4;
     --texto-balao: #4E5554;
@@ -88,9 +107,7 @@ body {
     color-scheme: light;
 }
 
-/* ---------- 3. Tema escuro ----------
-   Ativado pelo checkbox #toggle-tema (já existente no HTML)
-   ou pela classe .tema-escuro no <body>. */
+/* Tema escuro: checkbox #toggle-tema (já existe no HTML) ou classe .tema-escuro */
 body:has(#toggle-tema:checked),
 body.tema-escuro {
     --fundo: linear-gradient(0deg, #10030D 0%, #000000 100%);
@@ -107,10 +124,7 @@ body.tema-escuro {
     --btn-hover: linear-gradient(295deg, #40313C 0%, #8B6B82 100%);
     --btn-claro: #765F70;
 
-    --hover-img-pilula: var(--btn-hover);
-    --hover-img-item: var(--btn-hover);
-    --filtro-hover-padrao: none;
-    --filtro-hover-escuro: brightness(0.85);
+    --hover: brightness(0.8);
 
     --painel: #161316;
     --superficie: rgba(242, 241, 237, 0.11);
@@ -135,7 +149,7 @@ body.tema-escuro {
     color-scheme: dark;
 }
 
-/* ---------- 4. Base e utilitários ---------- */
+/* ---------- 3. Base e utilitários ---------- */
 *,
 *::before,
 *::after {
@@ -152,6 +166,7 @@ body {
     margin: 0;
     overflow-x: hidden;
     font-family: var(--fonte-principal);
+    font-size: calc(22 * var(--u));
     font-weight: 400;
     color: var(--texto);
     background: var(--fundo);
@@ -206,7 +221,17 @@ button {
     border: 0;
 }
 
-/* transição suave do hover (barras e botões) */
+/* botões do mesmo tipo compartilham a base escura */
+.botao-adicionar,
+.botao-salvar,
+.botao-entrar {
+    border: 0;
+    background: var(--btn-claro);
+    color: var(--sobre-btn);
+    box-shadow: var(--sombra);
+}
+
+/* hover: barras e botões escurecem levemente */
 .botao-cabecalho,
 .overlay-nav a,
 .overlay-nav label,
@@ -218,28 +243,46 @@ button {
     transition: filter 0.15s ease;
 }
 
-/* ---------- 5. Topo: logo, Notificações e Perfil ---------- */
+.botao-cabecalho:hover,
+.overlay-nav a:hover,
+.overlay-nav a:focus-visible,
+.overlay-nav label:hover,
+.marcar-lidas:hover,
+.perfil-opcao:hover,
+.botao-adicionar:hover,
+.botao-salvar:hover,
+.botao-entrar:hover {
+    filter: var(--hover);
+}
+
+/* tema escuro: ao clicar vale o gradiente do template */
+body:has(#toggle-tema:checked) :is(.botao-cabecalho, .overlay-nav a, .overlay-nav label, .marcar-lidas, .perfil-opcao, .botao-adicionar, .botao-salvar, .botao-entrar):active,
+body.tema-escuro :is(.botao-cabecalho, .overlay-nav a, .overlay-nav label, .marcar-lidas, .perfil-opcao, .botao-adicionar, .botao-salvar, .botao-entrar):active {
+    background-image: var(--btn-hover);
+}
+
+/* ---------- 4. Topo: logo, Notificações e Perfil ---------- */
 #cabecalho,
 #cabecalho-login,
 #cabecalho-editar-perfil {
     position: relative;
     z-index: 40;
-    height: var(--h-cab);
+    height: calc(84 * var(--u));
 }
 
 #cabecalho {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    padding-right: 1.5rem;
+    padding-right: calc(25 * var(--u));
 }
 
 .logo {
     display: flex;
     align-items: center;
-    height: 100%;
-    padding: 0 1.25rem;
-    font-size: 1.5rem;
+    height: calc(84 * var(--u));
+    padding: 0 calc(32 * var(--u));
+    font-size: calc(36 * var(--u));
     font-weight: 700;
     color: var(--logo);
     text-decoration: none;
@@ -263,28 +306,24 @@ button {
 
 .cabecalho-acoes {
     display: flex;
-    gap: 1.1rem;
+    gap: calc(25 * var(--u));
+    margin-top: calc(17 * var(--u));
 }
 
 .botao-cabecalho {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 7rem;
-    height: var(--pilula-h);
-    margin-top: calc((var(--h-cab) - var(--pilula-h)) / 2);
+    width: calc(172 * var(--u));
+    height: calc(75 * var(--u));
     border-radius: 999px;
     background: var(--btn-padrao);
     box-shadow: var(--sombra);
     color: var(--icone);
-    font-size: 0.72rem;
+    font-size: calc(17 * var(--u));
     font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
-}
-
-.botao-perfil {
-    width: 7.5rem;
 }
 
 .botao-cabecalho .rotulo {
@@ -293,21 +332,15 @@ button {
 
 .botao-cabecalho .icone {
     display: none;
-    width: 1.3rem;
-    height: 1.3rem;
-}
-
-.botao-cabecalho:hover {
-    background-image: var(--hover-img-pilula);
-    filter: var(--filtro-hover-padrao);
+    width: calc(34 * var(--u));
+    height: calc(34 * var(--u));
 }
 
 /* botão aberto vira "aba" ligada ao menu suspenso */
 #toggle-notificacoes:checked ~ #cabecalho label[for="toggle-notificacoes"],
 #toggle-perfil:checked ~ #cabecalho label[for="toggle-perfil"] {
-    height: var(--h-cab);
-    margin-top: 0;
-    border-radius: 1.75rem 1.75rem 0 0;
+    height: calc(79 * var(--u));
+    border-radius: calc(40 * var(--u)) calc(40 * var(--u)) 0 0;
     background: var(--btn-claro);
     color: var(--icone-ativo);
     box-shadow: none;
@@ -318,13 +351,12 @@ button {
     color: var(--sobre-btn);
 }
 
-/* ---------- 6. Menu e menus suspensos ---------- */
+/* ---------- 5. Menu e menus suspensos ---------- */
 #overlay-menu,
 #overlay-notificacoes,
 #overlay-perfil {
     display: none;
     position: absolute;
-    top: var(--h-cab);
     z-index: 45;
 }
 
@@ -336,91 +368,89 @@ button {
 
 /* menu de navegação (abre pelo logo) */
 #overlay-menu {
+    top: calc(84 * var(--u));
     left: 0;
-    width: 10.8rem;
+    width: calc(262 * var(--u));
     box-shadow: var(--sombra);
 }
 
 .overlay-nav a,
 .overlay-nav label {
-    display: block;
-    padding: 0.8rem 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(82 * var(--u));
+    padding: calc(10 * var(--u)) calc(20 * var(--u));
     background: var(--painel);
     color: var(--texto);
-    font-size: 0.85rem;
+    font-size: calc(22.4 * var(--u));
+    line-height: 1.35;
     text-align: center;
     text-decoration: none;
     cursor: pointer;
 }
 
-.overlay-nav a:hover,
-.overlay-nav label:hover,
-.overlay-nav a:focus-visible {
-    background-image: var(--hover-img-item);
-    filter: var(--filtro-hover-padrao);
-}
-
 /* notificações */
 #overlay-notificacoes {
-    right: 10.1rem;
-    width: 19rem;
+    top: calc(96 * var(--u));
+    right: calc(222 * var(--u));
+    width: calc(443 * var(--u));
     overflow: hidden;
-    border-radius: 0 0 0.9rem 0.9rem;
+    border-radius: 0 0 calc(28 * var(--u)) calc(28 * var(--u));
     box-shadow: var(--sombra);
 }
 
 .marcar-lidas {
     display: block;
     width: 100%;
-    padding: 0.55rem;
+    height: calc(53 * var(--u));
     border: 0;
     background: var(--btn-claro);
     color: var(--sobre-btn);
-    font-size: 0.65rem;
+    font-size: calc(15.4 * var(--u));
     font-weight: 700;
-}
-
-.marcar-lidas:hover {
-    filter: var(--filtro-hover-escuro);
 }
 
 .notifications-list {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
-    padding: 1rem 0.9rem 1.1rem;
+    gap: calc(48 * var(--u));
+    padding: calc(24 * var(--u)) calc(24 * var(--u));
     background: var(--painel);
 }
 
 .notification-item {
-    font-size: 0.8rem;
-    line-height: 1.35;
+    font-size: calc(22 * var(--u));
+    line-height: 1.4;
     text-align: center;
 }
 
 /* perfil */
 #overlay-perfil {
-    right: 1.5rem;
-    width: 13.5rem;
+    top: calc(96 * var(--u));
+    right: calc(25 * var(--u));
+    width: calc(327 * var(--u));
     overflow: hidden;
-    border-radius: 0 0 0.9rem 0.9rem;
+    border-radius: 0 0 calc(28 * var(--u)) calc(28 * var(--u));
     box-shadow: var(--sombra);
 }
 
 .perfil-saudacao {
-    padding: 0.4rem 0.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(32 * var(--u));
     background: var(--btn-claro);
     color: var(--sobre-btn);
-    font-size: 0.65rem;
-    line-height: 1.3;
-    text-align: center;
+    font-size: calc(16 * var(--u));
 }
 
 .perfil-opcao {
-    display: block;
-    padding: 0.65rem;
-    font-size: 0.9rem;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(56 * var(--u));
+    font-size: calc(22.4 * var(--u));
     text-decoration: none;
 }
 
@@ -434,77 +464,65 @@ button {
     color: var(--sobre-btn);
 }
 
-.perfil-editar:hover {
-    background-image: var(--hover-img-item);
-    filter: var(--filtro-hover-padrao);
-}
-
-.perfil-sair:hover {
-    filter: var(--filtro-hover-escuro);
-}
-
-/* ---------- 7. Página principal (index) ---------- */
+/* ---------- 6. Página principal (index) ---------- */
 #conteudo-principal {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 15.5rem;
-    column-gap: 1.5rem;
-    align-items: start;
-    width: min(76vw, 1100px);
-    margin: 0 auto;
-    padding-bottom: 4rem;
+    grid-template-columns: minmax(0, 1fr) calc(1040 * var(--u)) minmax(0, 1fr);
+    padding: calc(63 * var(--u)) 0 calc(120 * var(--u));
 }
 
 #secao-principal {
     grid-column: 1 / -1;
-    margin-bottom: 3rem;
-    padding-top: 2rem;
+    margin-bottom: calc(111 * var(--u));
     text-align: center;
 }
 
 #secao-principal h1 {
-    max-width: 46rem;
-    margin: 0 auto 0.6rem;
-    font-size: clamp(1.6rem, 4.2vw, 3rem);
+    max-width: calc(1000 * var(--u));
+    margin: 0 auto;
+    font-size: calc(72 * var(--u));
     font-weight: 700;
-    line-height: 1.3;
+    line-height: calc(97 * var(--u));
 }
 
 .welcome-text {
-    max-width: 44rem;
-    margin: 0 auto;
-    font-size: clamp(0.8rem, 1.2vw, 0.95rem);
-    line-height: 1.4;
+    max-width: calc(1050 * var(--u));
+    margin: calc(21 * var(--u)) auto 0;
+    font-size: calc(22.4 * var(--u));
+    line-height: calc(33.6 * var(--u));
 }
 
 .assistant-wrapper {
     position: relative;
-    max-width: 44rem;
-    margin: 2.5rem auto 0;
+    left: calc(-6 * var(--u));
+    width: calc(1040 * var(--u));
+    margin: calc(57 * var(--u)) auto 0;
     text-align: center;
 }
 
 .assistant-wrapper span {
     display: inline-block;
-    padding-left: 0.5rem;
+    padding-left: calc(10 * var(--u));
     border-left: 2px solid var(--texto);
-    font-size: 0.9rem;
+    font-size: calc(22.4 * var(--u));
+    line-height: calc(32.5 * var(--u));
 }
 
 .assistant-wrapper p {
-    max-width: 25rem;
-    margin: 0.1rem auto 1rem;
-    font-size: 0.9rem;
-    line-height: 1.35;
+    max-width: calc(650 * var(--u));
+    margin: 0 auto calc(15.5 * var(--u));
+    font-size: calc(22.4 * var(--u));
+    line-height: calc(32.5 * var(--u));
 }
 
 .assistant-wrapper input {
     width: 100%;
-    height: 2.75rem;
-    padding: 0 3rem;
+    height: calc(70 * var(--u));
+    padding: 0 calc(80 * var(--u));
     border: 2px solid var(--ia-borda);
     border-radius: 999px;
     background: transparent;
-    font-size: 0.72rem;
+    font-size: calc(18 * var(--u));
     text-align: center;
 }
 
@@ -514,12 +532,12 @@ button {
 
 .btn-assistant-send {
     position: absolute;
-    right: 24%;
+    right: 25%;
     bottom: 0;
     display: flex;
     align-items: center;
-    height: 2.75rem;
-    font-size: 0.85rem;
+    height: calc(70 * var(--u));
+    font-size: calc(22 * var(--u));
     color: var(--ia-placeholder);
     cursor: pointer;
 }
@@ -528,64 +546,72 @@ button {
     color: var(--texto);
 }
 
-/* ---------- 8. Calendário ---------- */
+/* ---------- 7. Calendário ---------- */
+#calendario {
+    position: relative;
+    left: calc(-6 * var(--u));
+    grid-column: 2;
+}
+
 .calendario-topo {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
     justify-content: space-between;
-    margin-bottom: 0.9rem;
+    height: calc(46 * var(--u));
+    margin-bottom: calc(17 * var(--u));
 }
 
 .calendario-topo h2 {
-    padding-left: 0.5rem;
-    font-size: 1.25rem;
+    margin: calc(-13 * var(--u)) 0 0 calc(25 * var(--u));
+    font-size: calc(36 * var(--u));
     font-weight: 600;
+    line-height: calc(43 * var(--u));
 }
 
 .botao-adicionar {
-    padding: 0.55rem 1rem;
-    border-radius: 0.5rem;
-    background: var(--btn-claro);
-    color: var(--sobre-btn);
-    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(308 * var(--u));
+    height: calc(46 * var(--u));
+    border-radius: calc(10 * var(--u));
+    font-size: calc(19 * var(--u));
+    font-weight: 600;
     text-align: center;
-    box-shadow: var(--sombra);
     cursor: pointer;
 }
 
-.botao-adicionar:hover {
-    filter: var(--filtro-hover-escuro);
-}
-
 .calendario-caixa {
-    padding: 0.75rem clamp(0.75rem, 2vw, 1.75rem) 1.5rem;
-    border-radius: 2rem;
+    padding: 0 0 calc(40 * var(--u));
+    border-radius: calc(44 * var(--u));
     background: var(--superficie);
     box-shadow: var(--sombra);
 }
 
 .calendario-mes {
     display: grid;
-    grid-template-columns: 2rem 1fr 2rem;
+    grid-template-columns: calc(42 * var(--u)) 1fr calc(52 * var(--u));
     align-items: center;
-    margin-bottom: 0.75rem;
+    height: calc(102 * var(--u));
 }
 
 .calendario-mes h3 {
-    font-size: clamp(1.3rem, 3vw, 2.4rem);
+    font-size: calc(55 * var(--u));
     font-weight: 700;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
+    line-height: 1.2;
     text-align: center;
     text-transform: uppercase;
 }
 
 .seta {
     justify-self: center;
-    padding: 0.25rem;
+    padding: 0;
     border: 0;
     background: none;
     color: var(--ia-placeholder);
-    font-size: 1.1rem;
+    font-size: calc(24 * var(--u));
+    line-height: 1;
 }
 
 .seta:hover {
@@ -593,33 +619,39 @@ button {
 }
 
 .calendario-grade {
-    width: 100%;
+    width: calc(100% - calc(46 * var(--u)));
+    margin: 0 calc(5 * var(--u)) 0 calc(41 * var(--u));
     border-collapse: collapse;
     table-layout: fixed;
 }
 
 .calendario-grade th {
-    padding: 0.5rem 0 1rem;
-    font-size: clamp(0.65rem, 1.9vw, 1.5rem);
+    height: calc(111 * var(--u));
+    padding: calc(22 * var(--u)) 0 0;
+    font-size: calc(40 * var(--u));
     font-weight: 400;
+    line-height: 1.2;
     text-align: center;
+    vertical-align: top;
 }
 
 .calendario-grade td {
-    padding: 0.15rem 0;
+    height: calc(96.7 * var(--u));
+    padding: 0;
     text-align: center;
+    vertical-align: middle;
 }
 
 .dia {
     display: block;
-    width: clamp(2rem, 4.4vw, 3.5rem);
-    aspect-ratio: 1;
-    margin: 0.25rem auto;
+    width: calc(86 * var(--u));
+    height: calc(86 * var(--u));
+    margin: 0 auto;
     padding: 0;
     border: 0;
     border-radius: 50%;
     background: transparent;
-    font-size: clamp(0.85rem, 2.2vw, 1.5rem);
+    font-size: calc(36 * var(--u));
     font-weight: 700;
 }
 
@@ -633,17 +665,20 @@ button {
     color: var(--sobre-btn);
 }
 
-/* ---------- 9. Compromissos de hoje (única área com Inter) ---------- */
+/* ---------- 8. Compromissos de hoje (única área com Inter) ---------- */
 #painel-compromissos-hoje {
     position: relative;
-    margin-top: 6.5rem;
-    padding: 1.75rem 1rem 1.5rem;
-    border-radius: 1.75rem;
+    grid-column: 3;
+    justify-self: start;
+    width: calc(369 * var(--u));
+    margin: calc(151 * var(--u)) 0 0 calc(46 * var(--u));
+    padding: calc(41 * var(--u)) calc(20 * var(--u)) calc(46 * var(--u));
+    border-radius: calc(48 * var(--u));
     background: var(--superficie);
     box-shadow: var(--sombra);
     color: var(--texto-compromissos);
     font-family: var(--fonte-compromissos);
-    scroll-margin-top: 6rem;
+    scroll-margin-top: calc(150 * var(--u));
 }
 
 #painel-compromissos-hoje h2 {
@@ -651,11 +686,12 @@ button {
     right: 0;
     bottom: 100%;
     left: 0;
-    margin-bottom: 0.5rem;
+    margin-bottom: calc(12 * var(--u));
     color: var(--texto);
     font-family: var(--fonte-principal);
-    font-size: 0.95rem;
+    font-size: calc(30 * var(--u));
     font-weight: 600;
+    line-height: calc(36 * var(--u));
     text-align: center;
 }
 
@@ -664,8 +700,7 @@ button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.3rem;
-    margin-bottom: 1.4rem;
+    margin-bottom: calc(54 * var(--u));
 }
 
 /* checkbox de conclusão: oculto visualmente, mas acessível por teclado */
@@ -675,16 +710,17 @@ button {
 }
 
 .appointment-text {
-    max-width: 12rem;
-    font-size: 0.8rem;
+    max-width: calc(272 * var(--u));
+    font-size: calc(20 * var(--u));
     font-weight: 500;
-    line-height: 1.35;
+    line-height: calc(23 * var(--u));
     text-align: center;
-    text-wrap: balance;
 }
 
 .btn-concluir {
-    font-size: 0.55rem;
+    margin-top: calc(18 * var(--u));
+    font-size: max(calc(8 * var(--u)), 8px);
+    line-height: calc(12 * var(--u));
     cursor: pointer;
 }
 
@@ -707,13 +743,14 @@ button {
 }
 
 .progress-tracker {
-    margin-top: 2rem;
-    font-size: 0.85rem;
+    margin-top: calc(27 * var(--u));
+    font-size: calc(20 * var(--u));
     font-weight: 600;
+    line-height: calc(24 * var(--u));
     text-align: center;
 }
 
-/* ---------- 10. Sobreposições (modais) e formulário de compromisso ---------- */
+/* ---------- 9. Modais e formulário de compromisso ---------- */
 #overlay-adicionar-compromisso,
 #overlay-assistente {
     display: none;
@@ -721,7 +758,6 @@ button {
     inset: 0;
     z-index: 60;
     place-items: center;
-    padding: 1rem;
 }
 
 #toggle-adicionar:checked ~ #overlay-adicionar-compromisso,
@@ -742,24 +778,20 @@ button {
 .overlay-caixa {
     position: relative;
     z-index: 1;
-    width: min(40rem, 100%);
-    max-height: 90vh;
+    width: calc(952 * var(--u));
+    min-height: calc(784 * var(--u));
+    max-height: 96vh;
     overflow-y: auto;
-    padding: 1.4rem 1.6rem 1.5rem;
-    border-radius: 2rem;
+    padding: calc(82 * var(--u)) calc(34 * var(--u)) calc(60 * var(--u));
+    border-radius: calc(52 * var(--u));
     background: var(--painel);
     box-shadow: var(--sombra-forte);
 }
 
-.overlay-topo {
-    position: relative;
-    padding-top: 1.4rem;
-}
-
 .overlay-topo h2 {
-    font-size: clamp(1.4rem, 3.2vw, 2.3rem);
+    font-size: calc(58 * var(--u));
     font-weight: 700;
-    line-height: 1.2;
+    line-height: calc(70 * var(--u));
     text-align: center;
 }
 
@@ -768,9 +800,9 @@ button {
 .icone-editar,
 .botao-fechar {
     position: absolute;
-    top: 0;
-    width: 1.5rem;
-    height: 1.5rem;
+    top: calc(34 * var(--u));
+    width: calc(36 * var(--u));
+    height: calc(36 * var(--u));
     background-color: var(--icone);
     font-size: 0;
     line-height: 0;
@@ -779,13 +811,13 @@ button {
 }
 
 .icone-editar {
-    left: 0;
+    left: calc(34 * var(--u));
     -webkit-mask-image: url("./assets/icons%20svg/edit%20icon.svg");
     mask-image: url("./assets/icons%20svg/edit%20icon.svg");
 }
 
 .botao-fechar {
-    right: 0;
+    right: calc(34 * var(--u));
     cursor: pointer;
     -webkit-mask-image: url("./assets/icons%20svg/closed%20icon.svg");
     mask-image: url("./assets/icons%20svg/closed%20icon.svg");
@@ -796,45 +828,68 @@ button {
 }
 
 /* formulário do compromisso */
+#overlay-adicionar-compromisso .overlay-caixa {
+    padding-bottom: calc(60 * var(--u));
+}
+
 #form-adicionar-compromisso {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
-    grid-template-rows: repeat(4, auto);
-    column-gap: 2rem;
-    row-gap: 0.6rem;
-    margin-top: 1.25rem;
+    grid-template-columns: calc(248 * var(--u)) calc(485 * var(--u));
+    grid-template-rows: calc(46 * var(--u)) calc(96 * var(--u)) calc(96 * var(--u)) calc(96 * var(--u)) calc(96 * var(--u)) auto;
+    column-gap: calc(108 * var(--u));
+    justify-content: start;
+    margin: calc(64 * var(--u)) calc(43 * var(--u)) 0 0;
 }
 
 #form-adicionar-compromisso .campo {
     grid-column: 1;
+    height: calc(96 * var(--u));
 }
 
+#form-adicionar-compromisso .campo:nth-child(1) { grid-row: 2; }
+#form-adicionar-compromisso .campo:nth-child(2) { grid-row: 3; }
+#form-adicionar-compromisso .campo:nth-child(3) { grid-row: 4; }
+#form-adicionar-compromisso .campo:nth-child(4) { grid-row: 5; }
+
 #form-adicionar-compromisso .campo label {
+    height: calc(34 * var(--u));
     color: var(--texto);
-    font-size: 1rem;
+    font-size: calc(28.8 * var(--u));
+    line-height: calc(34 * var(--u));
 }
 
 #form-adicionar-compromisso .campo input,
 #form-adicionar-compromisso .campo select {
-    min-height: 2rem;
+    height: calc(48 * var(--u));
+    min-height: 0;
+    font-size: calc(22 * var(--u));
     border-bottom: 2px dotted var(--texto);
 }
 
 #form-adicionar-compromisso .campo-descricao {
     grid-column: 2;
-    grid-row: 1 / span 4;
-    height: 100%;
+    grid-row: 1 / 6;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+#form-adicionar-compromisso .campo-descricao label {
+    flex: none;
+    margin-bottom: calc(12 * var(--u));
+    padding-left: calc(15 * var(--u));
 }
 
 #form-adicionar-compromisso .campo-descricao textarea {
-    flex: 1;
-    min-height: 11rem;
-    padding: 1rem;
+    flex: none;
+    height: calc(390 * var(--u));
+    padding: calc(24 * var(--u));
     border: 0;
-    border-radius: 1rem;
+    border-radius: calc(30 * var(--u));
     background: var(--campo-escuro);
     color: var(--sobre-btn);
-    font-size: 0.95rem;
+    font-size: calc(28.8 * var(--u));
+    line-height: 1.3;
     resize: none;
 }
 
@@ -843,49 +898,51 @@ button {
 }
 
 .botao-salvar {
-    padding: 0.45rem 1.1rem;
-    border: 0;
-    border-radius: 0.5rem;
-    background: var(--btn-claro);
-    color: var(--sobre-btn);
-    font-size: 0.8rem;
+    padding: 0 calc(28 * var(--u));
+    height: calc(42 * var(--u));
+    border-radius: calc(10 * var(--u));
+    font-size: calc(20 * var(--u));
     font-weight: 700;
-    box-shadow: var(--sombra);
-}
-
-.botao-salvar:hover {
-    filter: var(--filtro-hover-escuro);
 }
 
 #form-adicionar-compromisso .botao-salvar {
     grid-column: 2;
-    grid-row: 5;
+    grid-row: 6;
     justify-self: end;
-    margin-top: 0.4rem;
+    margin-top: calc(36 * var(--u));
 }
 
-/* ---------- 11. Assistente de IA ---------- */
-.chat {
+/* ---------- 10. Assistente de IA ---------- */
+#overlay-assistente .overlay-caixa {
     display: flex;
     flex-direction: column;
-    gap: 0.9rem;
-    max-height: 50vh;
-    margin: 1.25rem 0 1rem;
+    padding-bottom: calc(24 * var(--u));
+}
+
+.chat {
+    flex: 1;
+    margin-top: calc(60 * var(--u));
     overflow-y: auto;
 }
 
 .mensagem {
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: calc(6 * var(--u));
 }
 
 .mensagem-usuario {
     align-items: flex-end;
+    margin-top: calc(48 * var(--u));
 }
 
 .mensagem-assistente {
     align-items: flex-start;
+    margin-top: calc(8 * var(--u));
+}
+
+.chat > :first-child {
+    margin-top: 0;
 }
 
 /* os <img> do HTML ficam ocultos e os mesmos arquivos SVG
@@ -895,17 +952,20 @@ button {
     display: none;
 }
 
-.mensagem-usuario .remetente {
+.remetente {
     position: relative;
+}
+
+.mensagem-usuario .remetente {
     display: inline-block;
-    margin-right: 2rem;
-    padding: 0.2rem 0.55rem;
-    border-radius: 0.4rem;
+    margin-right: calc(52 * var(--u));
+    padding: 0 calc(14 * var(--u));
+    border-radius: calc(10 * var(--u));
     background: var(--chip-usuario);
     color: var(--sobre-btn);
-    font-size: 0.7rem;
+    font-size: calc(17.6 * var(--u));
     font-weight: 700;
-    line-height: 1.3;
+    line-height: calc(38 * var(--u));
     text-transform: uppercase;
 }
 
@@ -921,19 +981,18 @@ button {
 .mensagem-usuario .remetente::after {
     top: 50%;
     left: 100%;
-    width: 1.6rem;
-    height: 1.6rem;
-    margin-left: 0.35rem;
+    width: calc(38 * var(--u));
+    height: calc(38 * var(--u));
+    margin-left: calc(14 * var(--u));
     transform: translateY(-50%);
     -webkit-mask-image: url("./assets/icons%20svg/user%20icon.svg");
     mask-image: url("./assets/icons%20svg/user%20icon.svg");
 }
 
 .mensagem-assistente .remetente {
-    position: relative;
     display: block;
-    width: 1.8rem;
-    height: 1.8rem;
+    width: calc(40 * var(--u));
+    height: calc(38 * var(--u));
 }
 
 .mensagem-assistente .remetente::before {
@@ -944,11 +1003,11 @@ button {
 
 .mensagem p {
     max-width: 92%;
-    padding: 0.45rem 0.7rem;
-    border-radius: 0.5rem;
+    padding: calc(12 * var(--u)) calc(20 * var(--u));
+    border-radius: calc(10 * var(--u));
     color: var(--texto-balao);
-    font-size: 0.78rem;
-    line-height: 1.4;
+    font-size: calc(18 * var(--u));
+    line-height: calc(25 * var(--u));
 }
 
 .mensagem-usuario p {
@@ -963,9 +1022,11 @@ button {
 
 .barra-pergunta {
     display: flex;
+    flex: none;
     align-items: center;
-    margin: 0 0.5rem;
-    padding: 0.2rem 0.9rem;
+    height: calc(38 * var(--u));
+    margin: calc(24 * var(--u)) calc(58 * var(--u)) 0 calc(81 * var(--u));
+    padding: 0 calc(20 * var(--u));
     border: 1.5px solid var(--ia-borda);
     border-radius: 999px;
 }
@@ -977,11 +1038,11 @@ button {
 .barra-pergunta input {
     flex: 1;
     min-width: 0;
-    padding: 0.35rem;
+    padding: 0;
     border: 0;
     outline: 0;
     background: none;
-    font-size: 0.7rem;
+    font-size: calc(14 * var(--u));
     text-align: center;
 }
 
@@ -994,33 +1055,31 @@ button {
     border: 0;
     background: none;
     color: var(--ia-placeholder);
-    font-size: 0.8rem;
+    font-size: calc(16 * var(--u));
 }
 
 .barra-pergunta button:hover {
     color: var(--texto);
 }
 
-/* ---------- 12. Campos, login e editar perfil ---------- */
+/* ---------- 11. Campos, login e editar perfil ---------- */
 .campo {
     display: flex;
     flex-direction: column;
-    gap: 0.15rem;
     text-align: left;
 }
 
 .campo label {
     color: var(--ia-placeholder);
-    font-size: 0.8rem;
+    font-size: calc(28 * var(--u));
 }
 
 .campo input,
 .campo select {
     width: 100%;
-    min-height: 1.8rem;
-    padding: 0.3rem 0;
+    padding: 0;
     border: 0;
-    border-bottom: 1px solid var(--linha);
+    border-bottom: 2px solid var(--linha);
     border-radius: 0;
     background: transparent;
     outline: none;
@@ -1036,22 +1095,23 @@ button {
     color: var(--texto);
 }
 
-/* centraliza o cartão na tela (sem barra de topo) */
+/* cartão centralizado na tela (sem barra de topo) */
 .pagina-login #conteudo-login,
 .pagina-editar-perfil #conteudo-editar-perfil {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    margin-top: calc(-1 * var(--h-cab));
-    padding: var(--h-cab) 1rem 1rem;
+    margin-top: calc(-84 * var(--u));
+    padding: calc(84 * var(--u)) 16px 16px;
 }
 
 .caixa-login,
 .caixa-editar-perfil {
-    width: min(40rem, 100%);
-    padding: 2rem clamp(1.25rem, 8vw, 4.5rem) 2.5rem;
-    border-radius: 2.5rem;
+    width: calc(952 * var(--u));
+    min-height: calc(784 * var(--u));
+    padding: calc(59 * var(--u)) calc(135 * var(--u)) calc(88 * var(--u));
+    border-radius: calc(52 * var(--u));
     background: var(--painel);
     box-shadow: var(--sombra-forte);
 }
@@ -1068,14 +1128,14 @@ button {
     order: -1;
     width: auto;
     height: auto;
-    margin: 0 0 1.25rem;
+    margin: 0;
     overflow: visible;
     clip: auto;
     clip-path: none;
     white-space: normal;
-    font-size: clamp(1.5rem, 5vw, 2.4rem);
+    font-size: calc(58 * var(--u));
     font-weight: 700;
-    line-height: 1.2;
+    line-height: calc(70 * var(--u));
     text-align: center;
 }
 
@@ -1086,48 +1146,62 @@ button {
 
 .caixa-login::before {
     content: '';
-    width: clamp(5rem, 16vw, 8rem);
-    aspect-ratio: 1;
-    margin: 0.5rem 0 1.75rem;
+    width: calc(195 * var(--u));
+    height: calc(195 * var(--u));
+    margin-top: calc(58 * var(--u));
     background-color: var(--icone);
     -webkit-mask: url("./assets/icons%20svg/user%20icon.svg") center / contain no-repeat;
     mask: url("./assets/icons%20svg/user%20icon.svg") center / contain no-repeat;
 }
 
 #form-login {
-    display: flex;
-    flex-direction: column;
-    gap: 1.1rem;
     width: 100%;
+    margin-top: calc(56 * var(--u));
+}
+
+#form-login .campo {
+    position: relative;
+    height: calc(38 * var(--u));
+    margin-bottom: calc(63 * var(--u));
+}
+
+#form-login .campo:nth-child(2) {
+    margin-bottom: calc(50 * var(--u));
+}
+
+#form-login .campo label {
+    position: absolute;
+    left: 0;
+    bottom: calc(4 * var(--u));
+    line-height: calc(34 * var(--u));
+    pointer-events: none;
+    transition: transform 0.15s ease, font-size 0.15s ease;
+}
+
+#form-login .campo input {
+    height: calc(38 * var(--u));
+    font-size: calc(26 * var(--u));
+}
+
+/* o rótulo sobe quando o campo está em uso */
+#form-login .campo:focus-within label,
+#form-login .campo:has(input:valid) label {
+    transform: translateY(calc(-34 * var(--u)));
+    font-size: calc(18 * var(--u));
 }
 
 .botao-entrar {
-    align-self: center;
-    margin-top: 0.5rem;
-    padding: 0.7rem 2.5rem;
-    border: 0;
-    border-radius: 0.5rem;
-    background: var(--btn-claro);
-    color: var(--sobre-btn);
-    font-size: 0.85rem;
+    display: block;
+    width: calc(277 * var(--u));
+    height: calc(69 * var(--u));
+    margin: 0 auto;
+    border-radius: calc(14 * var(--u));
+    font-size: calc(26 * var(--u));
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    box-shadow: var(--sombra);
 }
 
-.botao-entrar:hover {
-    filter: var(--filtro-hover-escuro);
-}
-
-/* editar perfil */
-.caixa-editar-perfil h1 {
-    margin-bottom: 1.5rem;
-    font-size: clamp(1.5rem, 5vw, 2.4rem);
-    font-weight: 700;
-    text-align: center;
-}
-
-/* a tela aparece como janela sobre um fundo levemente escurecido */
+/* editar perfil: a página aparece como janela sobre fundo levemente escurecido */
 .pagina-editar-perfil::before {
     content: '';
     position: fixed;
@@ -1141,43 +1215,50 @@ button {
     z-index: 1;
 }
 
-.caixa-editar-perfil {
-    max-height: calc(100vh - 2rem);
-    overflow-y: auto;
+.caixa-editar-perfil h1 {
+    margin-bottom: calc(40 * var(--u));
+    font-size: calc(58 * var(--u));
+    font-weight: 700;
+    line-height: calc(70 * var(--u));
+    text-align: center;
 }
 
 #form-editar-perfil {
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;
+    gap: calc(44 * var(--u));
+}
+
+.caixa-editar-perfil .campo input {
+    height: calc(56 * var(--u));
+    font-size: calc(26 * var(--u));
 }
 
 .campo-foto {
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
+    gap: calc(10 * var(--u));
     text-align: center;
 }
 
 .icone-foto {
-    width: 5.5rem;
-    height: 5.5rem;
+    width: calc(120 * var(--u));
+    height: calc(120 * var(--u));
     color: var(--icone);
 }
 
 .campo-foto input[type='file'] {
     width: auto;
-    min-height: 0;
+    height: auto;
     border: 0;
     color: var(--ia-placeholder);
-    font-size: 0.8rem;
+    font-size: calc(18 * var(--u));
 }
 
 .campo-foto input[type='file']::file-selector-button {
-    margin-right: 0.6rem;
-    padding: 0.4rem 0.8rem;
+    margin-right: calc(14 * var(--u));
+    padding: calc(10 * var(--u)) calc(18 * var(--u));
     border: 0;
-    border-radius: 0.4rem;
+    border-radius: calc(10 * var(--u));
     background: var(--btn-claro);
     color: var(--sobre-btn);
     font: inherit;
@@ -1186,21 +1267,25 @@ button {
 }
 
 .campo-foto input[type='file']::file-selector-button:hover {
-    filter: var(--filtro-hover-escuro);
+    filter: var(--hover);
 }
 
 .acoes-formulario {
     display: flex;
     justify-content: center;
-    gap: 1rem;
-    margin-top: 1.25rem;
+    gap: calc(24 * var(--u));
+    margin-top: calc(10 * var(--u));
 }
 
 .acoes-formulario .botao-salvar,
 .botao-cancelar {
-    padding: 0.7rem 2rem;
-    border-radius: 0.5rem;
-    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(69 * var(--u));
+    padding: 0 calc(48 * var(--u));
+    border-radius: calc(14 * var(--u));
+    font-size: calc(24 * var(--u));
     font-weight: 700;
 }
 
@@ -1214,24 +1299,35 @@ button {
     background: var(--hover-suave);
 }
 
-/* ---------- 13. Responsivo (mobile) ---------- */
+/* ---------- 12. Mobile (design de 560 px) ---------- */
 @media (max-width: 860px) {
     body {
-        --h-cab: 4.5rem;
-        --pilula-h: 2.5rem;
+        --u: calc(100vw / 560);
+    }
+
+    /* topo */
+    #cabecalho,
+    #cabecalho-login,
+    #cabecalho-editar-perfil {
+        height: calc(127 * var(--u));
     }
 
     #cabecalho {
-        padding-right: 1rem;
+        padding-right: calc(44 * var(--u));
+    }
+
+    .logo {
+        height: calc(127 * var(--u));
     }
 
     .cabecalho-acoes {
-        gap: 0.75rem;
+        gap: calc(16 * var(--u));
+        margin-top: calc(41 * var(--u));
     }
 
-    .botao-cabecalho,
-    .botao-perfil {
-        width: 3.4rem;
+    .botao-cabecalho {
+        width: calc(110 * var(--u));
+        height: calc(62 * var(--u));
     }
 
     .botao-cabecalho .rotulo {
@@ -1240,11 +1336,14 @@ button {
 
     .botao-cabecalho .icone {
         display: block;
+        width: calc(36 * var(--u));
+        height: calc(36 * var(--u));
     }
 
     #toggle-notificacoes:checked ~ #cabecalho label[for="toggle-notificacoes"],
     #toggle-perfil:checked ~ #cabecalho label[for="toggle-perfil"] {
-        border-radius: 1.7rem 1.7rem 0 0;
+        height: calc(80 * var(--u));
+        border-radius: calc(40 * var(--u)) calc(40 * var(--u)) 0 0;
     }
 
     /* menus ocupam a largura toda */
@@ -1257,112 +1356,340 @@ button {
         border-radius: 0;
     }
 
+    #overlay-menu {
+        top: calc(127 * var(--u));
+    }
+
+    #overlay-notificacoes,
+    #overlay-perfil {
+        top: calc(121 * var(--u));
+    }
+
     .overlay-nav a,
     .overlay-nav label {
-        padding: 1rem 0.6rem;
-        font-size: 1rem;
+        min-height: calc(81 * var(--u));
     }
 
     .marcar-lidas {
-        padding: 0.7rem;
+        height: calc(53 * var(--u));
+    }
+
+    .notifications-list {
+        gap: calc(34 * var(--u));
+        padding: calc(25 * var(--u)) calc(24 * var(--u));
     }
 
     .notification-item {
-        font-size: 0.85rem;
-    }
-
-    .perfil-saudacao {
-        font-size: 0.7rem;
+        font-size: calc(20 * var(--u));
     }
 
     .perfil-opcao {
-        padding: 0.9rem;
-        font-size: 1rem;
+        height: calc(79 * var(--u));
     }
 
     /* conteúdo em uma coluna */
     #conteudo-principal {
         display: block;
+        padding: calc(134 * var(--u)) 0 calc(120 * var(--u));
     }
 
     #secao-principal {
-        margin-bottom: 2.5rem;
-        padding-top: 1rem;
+        margin-bottom: calc(173 * var(--u));
+    }
+
+    #secao-principal h1 {
+        max-width: calc(420 * var(--u));
+        font-size: calc(36 * var(--u));
+        line-height: calc(49 * var(--u));
+    }
+
+    .welcome-text {
+        max-width: calc(410 * var(--u));
+        margin-top: calc(24 * var(--u));
+        font-size: calc(17 * var(--u));
+        line-height: calc(23 * var(--u));
     }
 
     .assistant-wrapper {
-        margin-top: 1.75rem;
+        left: 0;
+        width: calc(443 * var(--u));
+        margin-top: calc(51 * var(--u));
     }
 
     .assistant-wrapper span,
     .assistant-wrapper p {
-        font-size: 0.75rem;
+        font-size: calc(18 * var(--u));
+        line-height: calc(27 * var(--u));
+    }
+
+    .assistant-wrapper p {
+        max-width: calc(400 * var(--u));
+        margin-bottom: calc(21 * var(--u));
     }
 
     .assistant-wrapper input {
-        height: 2.25rem;
-        padding: 0 2.5rem 0 1rem;
-        font-size: 0.6rem;
+        height: calc(48 * var(--u));
+        padding: 0 calc(60 * var(--u)) 0 calc(20 * var(--u));
+        font-size: calc(12.8 * var(--u));
     }
 
     .btn-assistant-send {
-        right: 1.1rem;
-        height: 2.25rem;
-        font-size: 0.7rem;
+        right: 13%;
+        height: calc(48 * var(--u));
+        font-size: calc(16 * var(--u));
+    }
+
+    /* calendário */
+    #calendario {
+        left: 0;
+        width: calc(398 * var(--u));
+        margin: 0 auto;
+    }
+
+    .calendario-topo {
+        height: calc(45 * var(--u));
+        margin-bottom: calc(4 * var(--u));
     }
 
     .calendario-topo h2 {
-        font-size: 1rem;
+        margin: calc(-6 * var(--u)) 0 0 calc(9 * var(--u));
+        font-size: calc(28 * var(--u));
+        line-height: calc(34 * var(--u));
     }
 
     .botao-adicionar {
-        max-width: 6.8rem;
-        padding: 0.4rem 0.6rem;
-        font-size: 0.6rem;
+        width: calc(125 * var(--u));
+        height: calc(45 * var(--u));
+        border-radius: calc(8 * var(--u));
+        font-size: calc(13 * var(--u));
+        line-height: 1.1;
     }
 
+    .calendario-caixa {
+        padding: 0 0 calc(6 * var(--u));
+        border-radius: calc(40 * var(--u));
+    }
+
+    .calendario-mes {
+        grid-template-columns: calc(20 * var(--u)) 1fr calc(30 * var(--u));
+        height: calc(92 * var(--u));
+    }
+
+    .calendario-mes h3 {
+        font-size: calc(30 * var(--u));
+        letter-spacing: 0.07em;
+    }
+
+    .seta {
+        font-size: calc(14 * var(--u));
+    }
+
+    .calendario-grade {
+        width: calc(100% - calc(37 * var(--u)));
+        margin: 0 calc(14 * var(--u)) 0 calc(23 * var(--u));
+    }
+
+    .calendario-grade th {
+        height: calc(20 * var(--u));
+        padding: 0;
+        font-size: calc(10 * var(--u));
+        vertical-align: middle;
+    }
+
+    .calendario-grade td {
+        height: calc(58.9 * var(--u));
+    }
+
+    .dia {
+        width: calc(46 * var(--u));
+        height: calc(46 * var(--u));
+        font-size: calc(17 * var(--u));
+    }
+
+    /* compromissos de hoje */
     #painel-compromissos-hoje {
-        margin-top: 4rem;
+        width: calc(399 * var(--u));
+        margin: calc(113 * var(--u)) auto 0;
+        padding: calc(38 * var(--u)) calc(20 * var(--u)) calc(40 * var(--u));
+        border-radius: calc(40 * var(--u));
     }
 
-    /* modais */
+    #painel-compromissos-hoje h2 {
+        margin-bottom: calc(14 * var(--u));
+        font-size: calc(27 * var(--u));
+        line-height: calc(32 * var(--u));
+    }
+
+    .appointment-item {
+        margin-bottom: calc(48 * var(--u));
+    }
+
+    .appointment-text {
+        max-width: calc(280 * var(--u));
+        font-size: calc(18 * var(--u));
+        line-height: calc(21 * var(--u));
+    }
+
+    .progress-tracker {
+        margin-top: calc(24 * var(--u));
+        font-size: calc(18 * var(--u));
+    }
+
+    /* modais, login e editar perfil */
+    .overlay-caixa,
+    .caixa-login,
+    .caixa-editar-perfil {
+        width: calc(527 * var(--u));
+        min-height: calc(940 * var(--u));
+        border-radius: calc(46 * var(--u));
+    }
+
     .overlay-caixa {
-        padding: 1.1rem 1rem 1.25rem;
-        border-radius: 1.75rem;
+        max-height: 98vh;
+        padding: calc(54 * var(--u)) calc(24 * var(--u)) calc(37 * var(--u));
+    }
+
+    .overlay-topo h2 {
+        font-size: calc(38 * var(--u));
+        line-height: calc(53 * var(--u));
+    }
+
+    .icone-editar,
+    .botao-fechar {
+        top: calc(31 * var(--u));
+        width: calc(36 * var(--u));
+        height: calc(36 * var(--u));
+    }
+
+    .icone-editar {
+        left: calc(24 * var(--u));
+    }
+
+    .botao-fechar {
+        right: calc(24 * var(--u));
     }
 
     #form-adicionar-compromisso {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: none;
-        column-gap: 1rem;
+        column-gap: calc(29 * var(--u));
+        row-gap: calc(40 * var(--u));
+        margin: calc(46 * var(--u)) 0 0;
     }
 
-    #form-adicionar-compromisso .campo {
-        grid-column: auto;
-    }
-
+    #form-adicionar-compromisso .campo,
+    #form-adicionar-compromisso .campo:nth-child(1),
+    #form-adicionar-compromisso .campo:nth-child(2),
     #form-adicionar-compromisso .campo:nth-child(3),
     #form-adicionar-compromisso .campo:nth-child(4) {
-        grid-column: 1 / -1;
+        grid-column: auto;
+        grid-row: auto;
+        height: calc(43 * var(--u));
+    }
+
+    #form-adicionar-compromisso .campo label {
+        height: calc(26 * var(--u));
+        font-size: calc(22 * var(--u));
+        line-height: calc(26 * var(--u));
+    }
+
+    #form-adicionar-compromisso .campo input,
+    #form-adicionar-compromisso .campo select {
+        height: calc(17 * var(--u));
+        font-size: calc(14 * var(--u));
     }
 
     #form-adicionar-compromisso .campo-descricao {
         grid-column: 1 / -1;
         grid-row: auto;
         height: auto;
+        margin-top: calc(36 * var(--u));
     }
 
-    #form-adicionar-compromisso .campo label {
-        font-size: 0.8rem;
+    #form-adicionar-compromisso .campo-descricao label {
+        margin-bottom: calc(21 * var(--u));
+        padding-left: 0;
+    }
+
+    #form-adicionar-compromisso .campo-descricao textarea {
+        height: calc(388 * var(--u));
+        padding: calc(18 * var(--u));
+        border-radius: calc(28 * var(--u));
+        font-size: calc(22 * var(--u));
     }
 
     #form-adicionar-compromisso .botao-salvar {
         grid-column: 1 / -1;
         grid-row: auto;
+        margin-top: calc(-17 * var(--u));
     }
 
+    .botao-salvar {
+        height: calc(40 * var(--u));
+        padding: 0 calc(26 * var(--u));
+        font-size: calc(18 * var(--u));
+    }
+
+    #overlay-assistente .overlay-caixa {
+        padding-bottom: calc(33 * var(--u));
+    }
+
+    .chat {
+        margin-top: calc(43 * var(--u));
+    }
+
+    .mensagem-usuario {
+        margin-top: calc(38 * var(--u));
+    }
+
+    .mensagem-usuario .remetente {
+        margin-right: calc(50 * var(--u));
+        line-height: calc(36 * var(--u));
+        font-size: calc(16 * var(--u));
+    }
+
+    .mensagem p {
+        font-size: calc(18 * var(--u));
+    }
+
+    .barra-pergunta {
+        margin: calc(24 * var(--u)) calc(14 * var(--u)) 0 calc(14 * var(--u));
+    }
+
+    /* login */
     .caixa-login,
     .caixa-editar-perfil {
-        border-radius: 2rem;
+        padding: calc(32 * var(--u)) calc(54 * var(--u)) calc(60 * var(--u));
+    }
+
+    .pagina-login h1.sr-only {
+        font-size: calc(44 * var(--u));
+        line-height: calc(59 * var(--u));
+    }
+
+    .caixa-login::before {
+        margin-top: calc(80 * var(--u));
+    }
+
+    #form-login {
+        margin-top: calc(83 * var(--u));
+    }
+
+    #form-login .campo {
+        margin-bottom: calc(60 * var(--u));
+    }
+
+    #form-login .campo:nth-child(2) {
+        margin-bottom: calc(56 * var(--u));
+    }
+
+    .caixa-editar-perfil h1 {
+        font-size: calc(44 * var(--u));
+    }
+
+    .pagina-login #conteudo-login,
+    .pagina-editar-perfil #conteudo-editar-perfil {
+        margin-top: calc(-127 * var(--u));
+        padding-top: calc(127 * var(--u));
     }
 }
